@@ -635,24 +635,6 @@ html {
   75% { color: green; }
   100% { color: red; }
 }
-.crop-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  object-fit: contain;
-  transition: transform 0.2s;
-}
-.crop-icon:hover {
-  transform: scale(1.1);
-}
-.crop-name {
-  color: #fff;
-  font-weight: bold;
-  transition: color 0.2s;
-}
-.crop-name:hover {
-  color: #90ee90;
-}
 
 </style>
 </head>
@@ -801,13 +783,59 @@ html {
       const statsBody = document.getElementById('stats-body');
       Object.values(categories).flat().forEach(crop => {
         const tr = document.createElement('tr');
-const imageUrl = 'assets/' + crop.toLowerCase().replace(/\s+/g, '_') + '.png';
-tr.innerHTML = `
-  <td style="display: flex; align-items: center; gap: 10px;">
-    <img src="${imageUrl}" alt="${crop}" class="crop-icon">
-    <span class="crop-name">${crop}</span>
-  </td>
-  <td>₵${basePrices[crop] || 'N/A'}</td>`;
+        const cropImageMap = {
+  "Carrot": "https://static.wikia.nocookie.net/growagarden/images/3/3c/Carrottransparent.png/revision/latest?cb=20250421123349",
+  "Strawberry": "https://static.wikia.nocookie.net/growagarden/images/6/6d/Strawberry.png/revision/latest?cb=20250501001831",
+  "Blueberry": "https://static.wikia.nocookie.net/growagarden/images/9/9e/Blueberry.png/revision/latest?cb=20250504064726",
+  "Orange Tulip": "https://static.wikia.nocookie.net/growagarden/images/4/4d/Orangetulip.png/revision/latest?cb=20250422131408",
+  "Tomato": "https://static.wikia.nocookie.net/growagarden/images/9/9d/Tomato.png/revision/latest?cb=20250501001240",
+  "Corn": "https://static.wikia.nocookie.net/growagarden/images/e/ee/CornCropsPic.png/revision/latest/scale-to-width-down/1000?cb=20250429082913",
+  "Daffodil": "https://static.wikia.nocookie.net/growagarden/images/3/31/Daffodilfruiticon.png/revision/latest?cb=20250422223149",
+  "Watermelon": "https://static.wikia.nocookie.net/growagarden/images/3/31/Watermelonfruiticon.png/revision/latest?cb=20250422203923",
+  "Pumpkin": "https://static.wikia.nocookie.net/growagarden/images/3/36/Pumpkincropp.png/revision/latest?cb=20250423182726",
+  "Apple": "https://static.wikia.nocookie.net/growagarden/images/c/c3/Applefruiticon.png/revision/latest?cb=20250423014534",
+  "Bamboo": "https://static.wikia.nocookie.net/growagarden/images/8/88/Bamboofruiticon.png/revision/latest?cb=20250422225330",
+  "Coconut": "https://static.wikia.nocookie.net/growagarden/images/4/46/Coconutfruiticon.png/revision/latest?cb=20250421045107",
+  "Cactus": "https://static.wikia.nocookie.net/growagarden/images/8/86/Cactus_fruit_icon.png/revision/latest?cb=20250422183017",
+  "Dragon Fruit": "https://static.wikia.nocookie.net/growagarden/images/4/4a/Dragonfruitthumb.png/revision/latest?cb=20250421182136",
+  "Mango": "https://static.wikia.nocookie.net/growagarden/images/0/0e/MangoFruitIcon.png/revision/latest?cb=20250421020339",
+  "Grape": "https://static.wikia.nocookie.net/growagarden/images/7/7b/Grapwes.png/revision/latest?cb=20250420202852",
+  "Mushroom": "https://static.wikia.nocookie.net/growagarden/images/3/3a/MushroomCropsPic.png/revision/latest/scale-to-width-down/1000?cb=20250430134436",
+  "Pepper": "https://static.wikia.nocookie.net/growagarden/images/2/29/PepperCropsPic.png/revision/latest/scale-to-width-down/1000?cb=20250503163931",
+  "Cacao": "https://static.wikia.nocookie.net/growagarden/images/f/f2/CacaoIcon.png/revision/latest/scale-to-width-down/1000?cb=20250511025646",
+  "Lemon": "https://static.wikia.nocookie.net/growagarden/images/9/92/LemonCropsPic.png/revision/latest/scale-to-width-down/1000?cb=20250429120733",
+  "Pineapple": "https://static.wikia.nocookie.net/growagarden/images/c/cc/PineappleFruitIcon.png/revision/latest?cb=20250421021345",
+  "Peach": "https://static.wikia.nocookie.net/growagarden/images/1/13/Transparent_Peach.png/revision/latest?cb=20250421060048",
+  "Raspberry": "https://static.wikia.nocookie.net/growagarden/images/1/1f/Raspberry.png/revision/latest?cb=20250423134817",
+  "Pear": "https://static.wikia.nocookie.net/growagarden/images/a/a1/Regpear.png/revision/latest?cb=20250417155929",
+  "Cranberry": "https://static.wikia.nocookie.net/growagarden/images/d/dd/Cranberry.png/revision/latest/scale-to-width-down/1000?cb=20250427102834",
+  "Durian": "https://static.wikia.nocookie.net/growagarden/images/c/c0/Duriannobg.png/revision/latest?cb=20250427170102",
+  "Eggplant": "https://static.wikia.nocookie.net/growagarden/images/f/fb/EggplantCropPic.png/revision/latest?cb=20250429150832",
+  "Venus Flytrap": "https://static.wikia.nocookie.net/growagarden/images/a/a5/VenusFlyTrapCropsPic.png/revision/latest/scale-to-width-down/1000?cb=20250430165230",
+  "Lotus": "https://static.wikia.nocookie.net/growagarden/images/6/68/LotusPic.png/revision/latest/scale-to-width-down/1000?cb=20250428145838",
+  "Papaya": "https://static.wikia.nocookie.net/growagarden/images/3/31/Papayafruiticon.png/revision/latest?cb=20250422220237",
+  "Banana": "https://static.wikia.nocookie.net/growagarden/images/c/cf/BananaPic.png/revision/latest/scale-to-width-down/1000?cb=20250428203430",
+  "Passionfruit": "https://static.wikia.nocookie.net/growagarden/images/0/01/NormalPassionfruitPic.png/revision/latest/scale-to-width-down/1000?cb=20250428142506",
+  "Soul Fruit": "https://static.wikia.nocookie.net/growagarden/images/9/96/SoulFruitCropsPic.png/revision/latest/scale-to-width-down/1000?cb=20250503182228",
+  "Cursed Fruit": "https://static.wikia.nocookie.net/growagarden/images/f/f3/Cursed_Fruit.png/revision/latest/scale-to-width-down/1000?cb=20250517073936",
+  "Chocolate Carrot": "https://static.wikia.nocookie.net/growagarden/images/d/d8/Chococarrotthumb.png/revision/latest?cb=20250424063607",
+  "Candy Sunflower": "https://static.wikia.nocookie.net/growagarden/images/0/0f/Candy_sunflower.png/revision/latest?cb=20250421155133",
+  "Easter Egg": "https://static.wikia.nocookie.net/growagarden/images/8/8e/Easter_egg_plant2.png/revision/latest?cb=20250422190119",
+  "Red Lollipop": "https://static.wikia.nocookie.net/growagarden/images/0/0d/Redlollithumb.png/revision/latest/scale-to-width-down/1000?cb=20250429063543",
+  "Candy Blossom": "https://static.wikia.nocookie.net/growagarden/images/5/52/CandyBlossomPic.png/revision/latest?cb=20250504064114",
+  "Nightshade": "https://static.wikia.nocookie.net/growagarden/images/d/dd/Flower.png/revision/latest?cb=20250510162934",
+  "Glowshroom": "https://static.wikia.nocookie.net/growagarden/images/7/75/GlowShroomFruit.png/revision/latest?cb=20250511113937",
+  "Mint": "https://static.wikia.nocookie.net/growagarden/images/0/09/MintFruit.png/revision/latest?cb=20250511171855",
+  "Moonflower": "https://static.wikia.nocookie.net/growagarden/images/a/a0/MoonFlowerCropsIcon.png/revision/latest/scale-to-width-down/1000?cb=20250511112259",
+  "Starfruit": "https://static.wikia.nocookie.net/growagarden/images/6/62/StarFruitFruit.png/revision/latest?cb=20250511082657",
+  "Moonglow": "https://static.wikia.nocookie.net/growagarden/images/5/54/Nobackgroundmoonglow.png.png/revision/latest?cb=20250510175014",
+  "Moon Blossom": "https://static.wikia.nocookie.net/growagarden/images/a/af/MoonBlossomFruit.png/revision/latest?cb=20250511173731",
+  "Beanstalk": "https://static.wikia.nocookie.net/growagarden/images/f/f9/BeanstalkIcon.png/revision/latest/scale-to-width-down/1000?cb=20250517153727",
+  "Blood Banana": "https://static.wikia.nocookie.net/growagarden/images/8/83/Blood_Banana_Icon.png/revision/latest?cb=20250517140315",
+  "Moon Melon": "https://static.wikia.nocookie.net/growagarden/images/4/4f/Moon_Melon_Icon.png/revision/latest?cb=20250517140316"
+};
+const imageUrl = cropImageMap[crop] || '';
+tr.innerHTML = `<td style="display:flex; align-items:center; gap:10px;"><img src="${imageUrl}" alt="${crop}" style="width:28px; height:28px; border-radius:4px;"> <span style='color:#fff; font-weight:bold;'>${crop}</span></td><td>₵${basePrices[crop] || 'N/A'}</td>`;
         statsBody.appendChild(tr);
       });
 
@@ -1046,4 +1074,5 @@ document.getElementById('result').style.display = 'block';
   </script>
 </body>
 </html>
+
 
