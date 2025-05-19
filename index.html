@@ -934,7 +934,59 @@ window.showCropReference = showCropReference;
           formattedParts = formattedParts.concat(formattedMutations);
         }
         
-        formattedParts.push(plant.toLowerCase());
+        let color = '';
+switch (plant) {
+  case 'Carrot': color = '#FFA500'; break;
+  case 'Strawberry': color = '#FF4C4C'; break;
+  case 'Blueberry': color = '#4C4CFF'; break;
+  case 'Tomato': color = '#FF6347'; break;
+  case 'Orange Tulip': color = '#FFB347'; break;
+  case 'Corn': color = '#FFF200'; break;
+  case 'Daffodil': color = '#FFFF66'; break;
+  case 'Watermelon': color = '#FF6B6B'; break;
+  case 'Pumpkin': color = '#FF7518'; break;
+  case 'Apple': color = '#FF1A1A'; break;
+  case 'Bamboo': color = '#7CFC00'; break;
+  case 'Coconut': color = '#A0522D'; break;
+  case 'Cactus': color = '#228B22'; break;
+  case 'Dragon Fruit': color = '#FF69B4'; break;
+  case 'Mango': color = '#FFD166'; break;
+  case 'Grape': color = '#800080'; break;
+  case 'Mushroom': color = '#D2B48C'; break;
+  case 'Pepper': color = '#FF0000'; break;
+  case 'Cacao': color = '#5C3317'; break;
+  case 'Pineapple': color = '#FFE135'; break;
+  case 'Raspberry': color = '#E30B5D'; break;
+  case 'Starfruit': color = '#FFF700'; break;
+  case 'Easter Egg': color = '#FFB6C1'; break;
+  case 'Candy Blossom': color = '#FF69B4'; break;
+  case 'Eggplant': color = '#800080'; break;
+  case 'Moonflower': color = '#9370DB'; break;
+  case 'Moonglow': color = '#ADD8E6'; break;
+  case 'Glowshroom': color = '#00CED1'; break;
+  case 'Mint': color = '#98FF98'; break;
+  case 'Beanstalk': color = '#2E8B57'; break;
+  case 'Blood Banana': color = '#8B0000'; break;
+  case 'Moon Melon': color = '#7FFFD4'; break;
+  case 'Lemon': color = '#FFF44F'; break;
+  case 'Peach': color = '#FFE5B4'; break;
+  case 'Pear': color = '#D1E231'; break;
+  case 'Papaya': color = '#FFDAB9'; break;
+  case 'Banana': color = '#FFE135'; break;
+  case 'Passionfruit': color = '#800080'; break;
+  case 'Soul Fruit': color = '#FF00FF'; break;
+  case 'Cursed Fruit': color = '#4B0082'; break;
+  case 'Chocolate Carrot': color = '#8B4513'; break;
+  case 'Candy Sunflower': color = '#FFD700'; break;
+  case 'Red Lollipop': color = '#FF0033'; break;
+  case 'Nightshade': color = '#483D8B'; break;
+  case 'Moon Blossom': color = '#E6E6FA'; break;
+  case 'Cranberry': color = '#A52A2A'; break;
+  case 'Durian': color = '#A9A900'; break;
+  case 'Venus Flytrap': color = '#90EE90'; break;
+  case 'Lotus': color = '#FFE4E1'; break;
+}
+formattedParts.push(`<span style="color:${color}; font-weight:bold;">${plant.toLowerCase()}</span>`);
         
         const formattedName = formattedParts.join(' ');
         
