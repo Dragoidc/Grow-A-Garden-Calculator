@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Grow a Garden Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body { 
+      margin:0; 
+      font-family:Arial,sans-serif; 
+      background:#333;
+      color:#fff;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    
+    .container { 
+      display:flex; 
+      min-height:100vh; 
+      flex-direction: column;
+    }
+    
+    .sidebar {
+      width: 100%;
+      background:#2e6b50;
+      color:#fff;
+      padding: 15px;
+      position: fixed;
+      z-index: 10;
+    }
+    
+    .sidebar h2 { 
+      margin:0 0 15px 0; 
+      font-size:1.4em; 
+      color:#fff;
+      font-weight:bold;
+    }
+    
+    .sidebar button {
+      display:block;
+      margin:8px 0;
+      width:100%;
+      padding:12px;
+      background:#387c63;
+      border:none;
+      color:#fff;
+      cursor:pointer;
+      text-align:left;
+      border-radius:6px;
+      transition:background .2s;
+      font-weight:bold;
+      font-size: 1em;
+    }
+    
+    .sidebar button:hover,
+    .sidebar button.active {
+      background:#45a078;
+    }
+
+    .view-crops-btn {
+      background: #45a078 !important;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 15;
+      padding: 12px 20px !important;
+      border-radius: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .view-crops-btn::before {
+      content: '🌱';
+      font-size: 1.2em;
+    }
+    
+    .main {
+      flex:1;
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+    
+    .plant-panel {
+      width:100%;
+      max-width:100%;
+      background:#444;
+      padding:20px;
+      display:none;
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      overflow-y:auto;
+      z-index:20;
+    }
+    
+    .plant-panel.active { 
+      display:block; 
+    }
+
+    .crop-reference-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 80px;
+      background: #2e6b50;
+      padding: 20px 15px;
+      overflow-y: none;
+      z-index: 20;
+      display: none;
+    }
+
+    .crop-reference-panel.active {
+      display: block;
+    }
+
+    .crop-reference-panel h2 {
+      color: #fff;
+      margin: 0 0 20px 0;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #45a078;
+      font-size: 1.4em;
+    }
+
+    .table-container {
+    max-height: calc(100vh - 180px);
+    overflow-y: auto;
+      background: rgba(0,0,0,0.1);
+     border-radius: 8px;
+     padding: 10px;
+     scrollbar-width: thin;          /* Add this line */
+      scrollbar-color: #45a078 #2e6b50; /* Add this line */
+    }
+
+    .crop-reference-panel table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95em;
+    }
+
+    .crop-reference-panel th {
+      background: #387c63;
+      color: #fff;
+      padding: 15px;
+      text-align: left;
+      top: -1px;
+    }
+
+    .crop-reference-panel td {
+      padding: 12px 15px;
+      background: rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .crop-reference-panel tr:hover td {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .crop-reference-panel .back-btn {
+      background: #45a078;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: all 0.2s;
+      display: inline-block;
+      margin-bottom: 20px;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    .crop-reference-panel .back-btn:hover {
+      background: #387c63;
+      transform: translateX(-3px);
+    }
+    
+    .plant-panel .back-btn {
+      background:none;
+      border:none;
+      color:#fff;
+      margin-bottom:15px;
+      text-align:left;
+      cursor:pointer;
+      font-weight:bold;
+      font-size: 1.1em;
+      padding: 10px 0;
+    }
+    
+    .plant-panel h3 { 
+      margin:0 0 15px 0; 
+      color:#fff;
+      font-weight:bold;
+      font-size: 1.3em;
+    }
+    
+    .plant-panel select,
+    .plant-panel input,
+    .plant-panel button {
+      width:100%;
+      margin-bottom:15px;
+      font-size:1em;
+      font-weight:bold;
+      padding: 12px;
+    }
+    
+    .plant-panel select,
+    .plant-panel input {
+      border:1px solid #555;
+      border-radius:6px;
+      background:#555;
+      color:#fff;
+    }
+    
+    .plant-panel button {
+      padding:15px;
+      background:#28a745;
+      border:none;
+      color:#fff;
+      border-radius:6px;
+      cursor:pointer;
+      transition:background .2s;
+      font-weight:bold;
+      font-size: 1.1em;
+    }
+    
+    .plant-panel button:hover { 
+      background:#218838; 
+    }
+    
+    .plant-panel .result {
+      font-weight:bold;
+      margin-top:20px;
+      color:#fff;
+      font-size: 1.1em;
+      padding: 15px;
+      background: #555;
+      border-radius: 6px;
+    }
+    
+    .hero {
+      background:#444;
+      border:1px solid #555;
+      border-radius:8px;
+      padding:20px;
+      margin-bottom:20px;
+      width:100%;
+      max-width:600px;
+    }
+    
+    .hero h1 { 
+      margin:0 0 15px 0; 
+      color:#fff;
+      font-weight:bold;
+      font-size: 1.5em;
+    }
+    
+    .hero p { 
+      margin:10px 0; 
+      color:#fff;
+      font-weight:bold;
+      font-size: 1em;
+    }
+    
+    .calculator-panel {
+      background:#444;
+      border:1px solid #555;
+      padding:20px;
+      border-radius:8px;
+      margin-bottom:20px;
+      width:100%;
+      max-width:600px;
+    }
+    
+    .calculator-panel h2 {
+      color:#fff;
+      font-weight:bold;
+      margin: 0 0 15px 0;
+      font-size: 1.3em;
+    }
+    
+    .calculator-panel p {
+      color:#fff;
+      font-weight:bold;
+      font-size: 1em;
+      margin: 0;
+      padding: 15px;
+      background: #555;
+      border-radius: 6px;
+    }
+    
+    .tips-grid, .history { 
+      width:100%; 
+      max-width:600px; 
+      margin-bottom:20px; 
+    }
+    
+    .tips-grid h2, .history h2 { 
+      margin:0 0 15px 0;
+      color:#fff;
+      font-weight:bold;
+      font-size: 1.3em;
+    }
+    
+    .grid-cards {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:15px;
+    }
+    
+    .card {
+      background:#444;
+      border:1px solid #555;
+      border-radius:6px;
+      padding:20px;
+    }
+    
+    .card h3 { 
+      margin:0 0 10px 0; 
+      font-size:1.2em; 
+      color:#fff;
+      font-weight:bold;
+    }
+    
+    .card p {
+      color:#fff;
+      font-weight:bold;
+      margin: 0;
+      font-size: 1em;
+    }
+    
+    .history ul { 
+      list-style:none; 
+      padding:0;
+      margin: 0;
+    }
+    
+    .history li { 
+      padding:15px; 
+      border-bottom:1px solid #555;
+      color:#fff;
+      font-weight:bold;
+      font-size: 1em;
+    }
+    
+    footer {
+      background:#444;
+      padding:20px;
+      text-align:center;
+      margin-top: auto;
+    }
+    
+    footer a {
+      color:#fff;
+      text-decoration:none;
+      margin:0 10px;
+      font-weight:bold;
+      font-size: 0.9em;
+      display: inline-block;
+      padding: 5px 0;
+    }
+    
+    footer a:hover { 
+      text-decoration:underline; 
+    }
+    
+    .mutation-section {
+      margin: 20px 0;
+      padding: 20px;
+      background: #555;
+      border-radius: 8px;
+    }
+    
+    .mutation-section h4 {
+      color:#fff;
+      font-weight:bold;
+      margin: 0 0 15px 0;
+      font-size: 1.1em;
+    }
+
+    .mutation-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 20px 0;
+    }
+    
+    .mutation-chip {
+      padding: 10px 15px;
+      background: #666;
+      border-radius: 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+      border: none;
+      color: #fff;
+      font-weight:bold;
+      font-size: 0.9em;
+    }
+    
+    .mutation-chip.active {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .variant-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0 20px 0;
+    }
+    
+    .variant-buttons button {
+      padding: 12px 15px;
+      background: #666;
+      border: 1px solid #555;
+      border-radius: 6px;
+      cursor: pointer;
+      color:#fff;
+      font-weight:bold;
+      font-size: 0.9em;
+      flex: 1;
+      min-width: 100px;
+    }
+    
+    .variant-buttons button.active {
+      background: #4CAF50;
+      color: white;
+      border-color: #45a049;
+    }
+
+    .current-multiplier {
+      margin-top: 15px;
+      font-weight: bold;
+      color:#fff;
+      font-size: 1em;
+      padding: 10px;
+      background: #666;
+      border-radius: 6px;
+    }
+    
+    .golden-text {
+      color: #ffd700;
+      font-weight: bold;
+    }
+    
+    .rainbow-text {
+      background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: bold;
+    }
+    
+    .shocked-text {
+  color: #ffcc00;
+  font-weight: bold;
+  text-shadow: 0 0 5px #ff9900;
+}
+    
+    .frozen-text {
+  color: #a0e0ff;
+  font-weight: bold;
+  text-shadow: 0 0 4px #cceeff;
+}
+    
+    .wet-text {
+  color: #00bfff;
+  font-weight: bold;
+  text-shadow: 0 0 3px #3399ff;
+}
+
+.chilled-text {
+  color: #66ccff;
+  font-weight: bold;
+  text-shadow: 0 0 3px #99e6ff;
+}
+    
+    .chocolate-text {
+  color: #5c3317;
+  font-weight: bold;
+  text-shadow: 0 0 2px #3e1f0f;
+}
+    
+    .moonlit-text {
+  color: #cfa8ff;
+  font-weight: bold;
+  text-shadow: 0 0 4px #ffffff;
+}
+    /* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.1);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #45a078;
+  border-radius: 5px;
+  border: 2px solid #2e6b50;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #387c63;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #45a078 #2e6b50;
+  scroll-behavior: smooth;
+}
+
+.crop-reference-panel {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.crop-reference-panel::-webkit-scrollbar {
+  display: none;
+}
+   @media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+  }
+  
+  .sidebar {
+    width: 250px;
+    min-height: 100vh;
+    position: fixed; /* Changed from default */
+    height: 100%;
+  }
+  
+  .main {
+    margin-left: 250px; /* Added to account for sidebar width */
+    width: calc(100% - 250px); /* Ensure proper width calculation */
+  }
+  
+  .plant-panel {
+    width: 300px;
+    left: 250px;
+    right: auto;
+  }
+
+  .crop-reference-panel {
+    left: 250px;
+    padding: 30px;
+    bottom: 0;
+  }
+  
+  .view-crops-btn {
+    left: 25px;
+    bottom: 30px;
+  }
+  
+  .grid-cards {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  
+  .variant-buttons button {
+    flex: none;
+  }
+}
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 1.3em;
+      }
+      
+      .plant-panel select,
+      .plant-panel input,
+      .plant-panel button {
+        padding: 15px;
+      }
+      
+      .mutation-chip {
+        padding: 8px 12px;
+        font-size: 0.8em;
+      }
+      
+      .variant-buttons button {
+        padding: 10px;
+        font-size: 0.8em;
+      }
+
+      .crop-reference-panel {
+        padding: 15px;
+      }
+      
+      .view-crops-btn {
+        padding-left: 40px !important;
+      }
+    }
+  .bloodlit-text {
+  color: #ff4d4d;
+  font-weight: bold;
+  text-shadow: 0 0 5px #ff1a1a;
+}
+
+.zombified-text {
+  color: #00ff00;
+  font-weight: bold;
+  text-shadow: 0 0 5px #00cc00;
+}
+
+.celestial-text {
+  color: #e0e0ff;
+  font-weight: bold;
+  text-shadow: 0 0 5px #b3b3ff;
+}
+
+.disco-text {
+  animation: disco 1s infinite;
+  font-weight: bold;
+}
+
+@keyframes disco {
+  0% { color: red; }
+  25% { color: yellow; }
+  50% { color: blue; }
+  75% { color: green; }
+  100% { color: red; }
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar" id="sidebar">
+      <h2>Categories</h2>
+    </nav>
+
+    <button class="view-crops-btn" onclick="showCropReference()">🌱 Crop Values</button>
+
+    <div id="panel" class="plant-panel">
+      <button class="back-btn" onclick="hidePanel()">← Back</button>
+      <h3 id="panel-title"></h3>
+      <select id="plant-select"></select>
+      <label>Mass (kg)</label>
+      <input type="number" id="mass" step="0.01" placeholder="e.g. 24.02">
+      
+      <div class="mutation-section">
+        <h4>Mutations</h4>
+        <div class="mutation-chips" id="mutation-chips"></div>
+        
+        <h4>Variants</h4>
+        <div class="variant-buttons">
+          <button class="active" data-mult="1">Normal</button>
+          <button data-mult="20">Golden</button>
+          <button data-mult="50">Rainbow</button>
+        </div>
+        
+        <div class="current-multiplier">
+          Active Multiplier: <span id="active-multiplier">1</span>
+        </div>
+      </div>
+      
+      <input type="hidden" id="multiplier" value="1">
+      <button onclick="calculate()">Calculate</button>
+      <div class="result" id="result" style="display:none;"></div>
+    </div>
+
+    <div class="crop-reference-panel" id="crop-reference">
+      <button class="back-btn" onclick="hideCropReference()">← Back to Calculator</button>
+      <h2>Crop Value Reference</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>Crop</th><th>Base Value</th></tr>
+          </thead>
+          <tbody id="stats-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <main class="main">
+      <section class="hero">
+        <h1>Welcome to the Sell Price Calculator!</h1>
+        <p>Select a category on the left, pick your plant, enter its weight and multiplier, then click Calculate to see your sell price.</p>
+      </section>
+
+      <section class="calculator-panel">
+        <h2>Calculation Results</h2>
+        <p id="calc-output">Your result will appear here.</p>
+      </section>
+
+      <section class="tips-grid">
+        <h2>Quick Tips & FAQs</h2>
+        <div class="grid-cards">
+          <div class="card"><h3>Tip: Precision Matters</h3><p>Use two decimal places in weight for the most accurate price.</p></div>
+          <div class="card"><h3>Tip: Multipliers</h3><p>Enter your mutation or event multipliers accurately to reflect true value.</p></div>
+          <div class="card"><h3>FAQ: Floor Function</h3><p>This calculator rounds down (floor) to match in-game behavior.</p></div>
+          <div class="card"><h3>FAQ: Resetting</h3><p>Click a different category or reload the page to reset inputs.</p></div>
+        </div>
+      </section>
+
+      <section class="history">
+        <h2>Recent Calculations</h2>
+        <ul id="history-list"><li>No calculations yet.</li></ul>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p><a href="#">Grow a Garden Wiki</a> | <a href="#">Discord</a> | <a href="#">GitHub Source</a></p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const categories = {
+        "Public Crops": [
+          "Carrot","Strawberry","Blueberry","Orange Tulip","Tomato",
+          "Corn","Daffodil","Watermelon","Pumpkin","Apple",
+          "Bamboo","Coconut","Cactus","Dragon Fruit","Mango",
+          "Grape","Mushroom","Pepper","Cacao"
+        ],
+        "Normal Seed Pack": ["Lemon","Pineapple","Peach","Raspberry","Pear"],
+        "Premium Seed Pack": ["Raspberry","Cranberry","Durian","Eggplant","Venus Flytrap","Lotus"],
+        "Exotic Seed Pack": ["Papaya","Banana","Passionfruit","Soul Fruit","Cursed Fruit"],
+        "Easter Event": ["Chocolate Carrot","Candy Sunflower","Easter Egg","Red Lollipop","Candy Blossom"],
+        "Lunar Glow Event": ["Nightshade","Glowshroom","Mint","Moonflower","Starfruit","Moonglow","Moon Blossom"]
+      };
+
+      const basePrices = {
+  "Carrot": 270,
+  "Strawberry": 167,
+  "Blueberry": 500,
+  "Tomato": 120,
+  "Orange Tulip": 350000,
+  "Corn": 10,
+  "Daffodil": 25000,
+  "Watermelon": 61.25,
+  "Pumpkin": 53.1,
+  "Apple": 30.625,
+  "Bamboo": 250,
+  "Coconut": 2.04,
+  "Cactus": 69.4,
+  "Dragon Fruit": 33,
+  "Mango": 28.875,
+  "Grape": 872.25,
+  "Mushroom": 241.5,
+  "Pepper": 320,
+  "Cacao": 171.875,
+  "Pineapple": 222,
+  "Raspberry": 178,
+  "Starfruit": 1666.25,
+  "Easter Egg": 280,
+  "Candy Blossom": 11100,
+  "Eggplant": 300,
+  "Moonflower": 2375,
+  "Moonglow": 408,
+  "Glowshroom": 533,
+  "Mint": 5250,
+  "Beanstalk": 200,
+  "Blood Banana": 4198,
+  "Moon Melon": 711
+};
+
+      const calculationHistory = JSON.parse(localStorage.getItem('gardenCalculations')) || [];
+
+      const sidebar = document.getElementById('sidebar');
+      for (let catName of Object.keys(categories)) {
+        const btn = document.createElement('button');
+        btn.textContent = catName;
+        btn.onclick = () => selectCategory(catName);
+        sidebar.appendChild(btn);
+      }
+
+      const statsBody = document.getElementById('stats-body');
+      Object.values(categories).flat().forEach(crop => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${crop}</td><td>₵${basePrices[crop] || 'N/A'}</td>`;
+        statsBody.appendChild(tr);
+      });
+
+      const mutations = [
+  { name: "Shocked", value: 99 },
+  { name: "Chilled", value: 1 },
+  { name: "Wet", value: 1 },
+  { name: "Moonlit", value: 1 },
+  { name: "Frozen", value: 9 },
+  { name: "Chocolate", value: 1 },
+  { name: "Bloodlit", value: 3 },
+  { name: "Zombified", value: 24 },
+  { name: "Celestial", value: 119 },
+  { name: "Disco", value: 124 }
+];
+
+      let variantMultiplier = 1;
+      let baseMultiplier = 1;
+
+      const mutationChips = document.getElementById('mutation-chips');
+      mutations.forEach(mutation => {
+        const chip = document.createElement('div');
+        chip.className = 'mutation-chip';
+        chip.textContent = mutation.name;
+        chip.dataset.value = mutation.value;
+        chip.addEventListener('click', () => {
+          chip.classList.toggle('active');
+          updateMultiplier();
+        });
+        mutationChips.appendChild(chip);
+      });
+
+      const variantButtons = document.querySelectorAll('.variant-buttons button');
+      variantButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          variantButtons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          variantMultiplier = parseInt(this.dataset.mult);
+          updateMultiplier();
+        });
+      });
+
+      function updateMultiplier() {
+        const activeChips = document.querySelectorAll('.mutation-chip.active');
+        let mutationSum = 0;
+        
+        activeChips.forEach(chip => {
+          mutationSum += parseInt(chip.dataset.value);
+        });
+        
+        const totalMultiplier = baseMultiplier + mutationSum;
+        const effectiveMultiplier = totalMultiplier * variantMultiplier;
+        
+        document.getElementById('active-multiplier').textContent = effectiveMultiplier;
+        document.getElementById('multiplier').value = effectiveMultiplier;
+      }
+
+      function updateHistoryDisplay() {
+        const historyList = document.getElementById('history-list');
+        if (calculationHistory.length === 0) {
+          historyList.innerHTML = '<li>No calculations yet.</li>';
+        } else {
+          historyList.innerHTML = calculationHistory.map(h => `<li>${h.html}</li>`).join('');
+        }
+      }
+
+      function selectCategory(catName) {
+        hideCropReference();
+        document.querySelectorAll('#sidebar button')
+                .forEach(b => b.classList.toggle('active', b.textContent === catName));
+        document.getElementById('panel-title').textContent = catName;
+        document.getElementById('plant-select').innerHTML =
+          categories[catName].map(p => `<option>${p}</option>`).join('');
+        document.getElementById('panel').classList.add('active');
+
+        document.getElementById('calc-output').textContent = 'Your result will appear here.';
+        document.getElementById('result').textContent = '';
+        document.getElementById('result').style.display = 'none';
+
+        updateHistoryDisplay();
+      }
+      window.selectCategory = selectCategory;
+
+      function hidePanel() {
+        document.getElementById('panel').classList.remove('active');
+        document.querySelectorAll('#sidebar button').forEach(b => b.classList.remove('active'));
+        document.getElementById('result').textContent = '';
+        document.getElementById('result').style.display = 'none';
+      }
+      window.hidePanel = hidePanel;
+
+      function showCropReference() {
+  const panel = document.getElementById('crop-reference');
+  panel.classList.add('active');
+  document.querySelector('.main').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+}
+window.showCropReference = showCropReference;
+
+    function hideCropReference() {
+    document.getElementById('crop-reference').classList.remove('active');
+    document.querySelector('.main').style.display = 'flex';
+    document.body.style.overflow = 'auto'; // Add this line
+    }
+      window.hideCropReference = hideCropReference;
+
+      function calculate() {
+        const plant = document.getElementById('plant-select').value;
+        const mass = parseFloat(document.getElementById('mass').value);
+        const mult = parseFloat(document.getElementById('multiplier').value);
+        
+        if (isNaN(mass)) {
+          alert('Please enter a valid mass');
+          return;
+        }
+        
+        const basePrice = basePrices[plant] || 100;
+        const price = mass * mass * basePrice * mult;
+        
+        const variantBtn = document.querySelector('.variant-buttons button.active');
+        const variant = variantBtn.textContent;
+        
+        const activeMutations = Array.from(document.querySelectorAll('.mutation-chip.active'))
+          .map(chip => chip.textContent);
+        
+        let formattedParts = [];
+        
+        if (variant !== 'Normal') {
+          const variantClass = variant === 'Golden' ? 'golden-text' : 'rainbow-text';
+          formattedParts.push(`<span class="${variantClass}">${variant.toLowerCase()}</span>`);
+        }
+        
+        if (activeMutations.length > 0) {
+          const formattedMutations = activeMutations.map(mut => {
+            let mutClass = '';
+            if (mut === 'Shocked') mutClass = 'shocked-text';
+            else if (mut === 'Frozen') mutClass = 'frozen-text';
+            else if (mut === 'Wet') mutClass = 'wet-text';
+            else if (mut === 'Chilled') mutClass = 'chilled-text';
+            else if (mut === 'Chocolate') mutClass = 'chocolate-text';
+            else if (mut === 'Moonlit') mutClass = 'moonlit-text';
+            else if (mut === 'Bloodlit') mutClass = 'bloodlit-text';
+            else if (mut === 'Zombified') mutClass = 'zombified-text';
+            else if (mut === 'Celestial') mutClass = 'celestial-text';
+            else if (mut === 'Disco') mutClass = 'disco-text';
+            return `<span class="${mutClass}">${mut.toLowerCase()}</span>`;
+          });
+          formattedParts = formattedParts.concat(formattedMutations);
+        }
+        
+        formattedParts.push(plant.toLowerCase());
+        
+        const formattedName = formattedParts.join(' ');
+        
+        const entry = {
+          raw: `${variant !== 'Normal' ? variant.toLowerCase() + ' ' : ''}${activeMutations.length > 0 ? activeMutations.join(' ').toLowerCase() + ' ' : ''}${plant.toLowerCase()} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`,
+          html: `${formattedName} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`
+        };
+        
+        document.getElementById('calc-output').innerHTML = entry.html;
+        document.getElementById('result').innerHTML = entry.html;
+document.getElementById('result').style.display = 'block';
+        
+        calculationHistory.unshift(entry);
+        if (calculationHistory.length > 5) calculationHistory.pop();
+        localStorage.setItem('gardenCalculations', JSON.stringify(calculationHistory));
+        
+        updateHistoryDisplay();
+      }
+      window.calculate = calculate;
+
+      function hideCalcOutput(){
+  document.getElementById('calc-output').textContent = 'Your result will appear here.';
+  document.getElementById('result').textContent = '';
+  document.getElementById('result').style.display = 'none';
+}
+      window.hideCalcOutput = hideCalcOutput;
+
+      updateMultiplier();
+      updateHistoryDisplay();
+    });
+  </script>
+</body>
+</html>
+
