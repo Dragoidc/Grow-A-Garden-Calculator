@@ -635,6 +635,24 @@ html {
   75% { color: green; }
   100% { color: red; }
 }
+.crop-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  object-fit: contain;
+  transition: transform 0.2s;
+}
+.crop-icon:hover {
+  transform: scale(1.1);
+}
+.crop-name {
+  color: #fff;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+.crop-name:hover {
+  color: #90ee90;
+}
 
 </style>
 </head>
@@ -783,7 +801,13 @@ html {
       const statsBody = document.getElementById('stats-body');
       Object.values(categories).flat().forEach(crop => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td><span style='color:#fff; font-weight:bold;'>${crop}</span></td><td>₵${basePrices[crop] || 'N/A'}</td>`;
+const imageUrl = 'assets/' + crop.toLowerCase().replace(/\s+/g, '_') + '.png';
+tr.innerHTML = `
+  <td style="display: flex; align-items: center; gap: 10px;">
+    <img src="${imageUrl}" alt="${crop}" class="crop-icon">
+    <span class="crop-name">${crop}</span>
+  </td>
+  <td>₵${basePrices[crop] || 'N/A'}</td>`;
         statsBody.appendChild(tr);
       });
 
