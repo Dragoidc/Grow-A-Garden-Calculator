@@ -1,10 +1,9 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Grow a Garden Calculator</title>
-  <style>
+ <style>
     * {
       box-sizing: border-box;
     }
@@ -43,7 +42,7 @@
     .sidebar-toggle {
       position: fixed;
       left: 20px;
-      top: 20px;
+      top: 60px; /* Increased top position to avoid overlap with search bar */
       background: #2e6b50;
       border: none;
       color: white;
@@ -53,9 +52,10 @@
       z-index: 1001;
     }
     
-    .search-container {
-      padding: 15px;
-    }
+   .search-container {
+  padding: 1px;
+  margin-bottom: 5px;    /* ← add this */
+}
     
     .search-input {
       width: 100%;
@@ -739,32 +739,53 @@
       display: none;
     }
 
-    .tooltip {
-      position: relative;
-      display: inline-block;
-      margin-left: 5px;
-    }
+    /* ── Replace your existing .tooltip rules with these ── */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
 
-    .tooltip::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: 150%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.8);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 0.9em;
-      white-space: nowrap;
-      opacity: 0;
-      transition: opacity 0.2s;
-      pointer-events: none;
-    }
+/* The popup box */
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 50%;
+  left: 105%;                  /* just to the right of the image */
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  white-space: normal;         /* allow wrapping */
+  width: 160px;                /* fixed width for your text */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  z-index: 100;
+}
 
-    .tooltip:hover::after {
-      opacity: 1;
-    }
+/* Optional little arrow on the left of the box */
+.tooltip::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;                  /* flush with the left edge of the box */
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: rgba(0,0,0,0.8);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Show both arrow and box on hover */
+.tooltip:hover::after,
+.tooltip:hover::before {
+  opacity: 1;
+}
 
     .history-controls {
       display: flex;
@@ -780,7 +801,6 @@
 </head>
 <body>
   <div class="container">
-    <button class="sidebar-toggle" id="sidebarToggle">☰</button>
     <nav class="sidebar" id="sidebar">
       <div class="search-container">
         <input type="text" class="search-input" placeholder="🔍 Search crops..." id="sidebarSearch">
@@ -798,10 +818,6 @@
     <div id="panel" class="plant-panel">
       <button class="back-btn" onclick="hidePanel()">← Back</button>
       <h3 id="panel-title"></h3>
-      <div class="plant-search-container">
-        <input type="text" id="plantSearch" placeholder="Search plants..." class="search-input">
-        <button class="clear-search" onclick="clearPlantSearch()">×</button>
-      </div>
       <select id="plant-select"></select>
       <label>Mass (kg) <span class="tooltip" data-tooltip="0.01 - 9999 kg">❓</span></label>
       <input type="number" id="mass" step="0.01" min="0.01" max="9999" placeholder="e.g. 24.02" oninput="validateMass()">
@@ -887,13 +903,14 @@
           "Carrot","Strawberry","Blueberry","Orange Tulip","Tomato",
           "Corn","Daffodil","Watermelon","Pumpkin","Apple",
           "Bamboo","Coconut","Cactus","Dragon Fruit","Mango",
-          "Grape","Mushroom","Pepper","Cacao"
+          "Grape","Mushroom","Pepper","Cacao", "Beanstalk",
         ],
         "Normal Seed Pack": ["Lemon","Pineapple","Peach","Raspberry","Pear"],
         "Premium Seed Pack": ["Raspberry","Cranberry","Durian","Eggplant","Venus Flytrap","Lotus"],
         "Exotic Seed Pack": ["Papaya","Banana","Passionfruit","Soul Fruit","Cursed Fruit"],
         "Easter Event": ["Chocolate Carrot","Candy Sunflower","Easter Egg","Red Lollipop","Candy Blossom"],
-        "Lunar Glow Event": ["Nightshade","Glowshroom","Mint","Moonflower","Starfruit","Moonglow","Moon Blossom"]
+        "Lunar Glow Event": ["Nightshade","Glowshroom","Mint","Moonflower","Starfruit","Moonglow","Moon Blossom","Blood Banana", "Moon Melon"]
+        
       };
 
       const basePrices = {
@@ -930,24 +947,90 @@
         "Blood Banana": 4198,
         "Moon Melon": 711
       };
+      
+    // ── START: “how obtained” placeholders ──
+      const cropInfo = {};
+      Object.values(categories).flat().forEach(crop => {
+cropInfo["Carrot"]           = "Buyable from Seed Shop for 10₵ (always in stock)";
+cropInfo["Strawberry"]       = "Buyable from Seed Shop for 50₵ (always in stock)";
+cropInfo["Blueberry"]        = "Buyable from Seed Shop for 400₵ (always in stock)";
+cropInfo["Orange Tulip"]     = "Buyable from Seed Shop for 600₵ (~35% chance to appear)";
+cropInfo["Tomato"]           = "Buyable from Seed Shop for 800₵ (always in stock)";
+cropInfo["Corn"]             = "Buyable from Seed Shop for 1,300₵ (~30% chance)";
+cropInfo["Daffodil"]         = "Buyable from Seed Shop for 1,000₵ (~15% chance)";
+cropInfo["Watermelon"]       = "Buyable from Seed Shop for 2,500₵ (~13% chance)";
+cropInfo["Pumpkin"]          = "Buyable from Seed Shop for 3,000₵ (~10% chance)";
+cropInfo["Apple"]            = "Buyable from Seed Shop for 3,250₵ (~7% chance)";
+cropInfo["Bamboo"]           = "Buyable from Seed Shop for 4,000₵ (~20% chance)";
+cropInfo["Coconut"]          = "Buyable from Seed Shop for 6,000₵ (~5% chance)";
+cropInfo["Cactus"]           = "Buyable from Seed Shop for 15,000₵ (~3% chance)";
+cropInfo["Dragon Fruit"]     = "Buyable from Seed Shop for 30,000₵ (~2% chance)";
+cropInfo["Mango"]            = "Buyable from Seed Shop for 100,000₵ (~1.5% chance)";
+cropInfo["Grape"]            = "Buyable from Seed Shop for 850,000₵ (~1% chance)";
+cropInfo["Mushroom"]         = "Buyable from Seed Shop for 150,000₵ (~0.75% chance)";
+cropInfo["Pepper"]           = "Buyable from Seed Shop for 1,000,000₵ (~0.5% chance)";
+cropInfo["Cacao"]            = "Buyable from Seed Shop for 2,500,000₵ (~0.5% chance)";
+cropInfo["Beanstalk"]        = "Buyable from Seed Shop for 10,000,000₵ (~0.5% chance to appear)";
+cropInfo["Lemon"]            = "Exclusive event reward (no longer obtainable)";
+cropInfo["Pineapple"]        = "Dropped from Normal Seed Pack (~7.7% chance)";
+cropInfo["Peach"]            = "Dropped from Normal Seed Pack (~7.7% chance)";
+cropInfo["Raspberry"]        = "Dropped from Normal Seed Pack (~7.7% chance)";
+cropInfo["Pear"]             = "Dropped from Normal Seed Pack (~7.7% chance)";
+cropInfo["Cranberry"]        = "Dropped from Basic Seed Pack (~30% chance); Premium Seed Pack (45% chance)";
+cropInfo["Durian"]           = "Dropped from Basic Seed Pack (~21% chance); Premium Seed Pack (35% chance)";
+cropInfo["Eggplant"]         = "Dropped from Basic Seed Pack (~8.7% chance); Premium Seed Pack (16% chance)";
+cropInfo["Venus Flytrap"]    = "Dropped from Basic Seed Pack (~0.01% chance); Premium Seed Pack (1% chance)";
+cropInfo["Lotus"]            = "Dropped from Basic Seed Pack (~0.25% chance); Premium Seed Pack (2.5% chance)";
+cropInfo["Papaya"]           = "Dropped from Exotic Seed Pack (~40% chance)";
+cropInfo["Banana"]           = "Dropped from Exotic Seed Pack (~38% chance)";
+cropInfo["Passionfruit"]     = "Dropped from Exotic Seed Pack (~20% chance)";
+cropInfo["Soul Fruit"]       = "Dropped from Exotic Seed Pack (~1.5% chance, event-limited)";
+cropInfo["Cursed Fruit"]     = "Dropped from Exotic Seed Pack (~0.5% chance, rarest crop)";
+cropInfo["Chocolate Carrot"] = "Buyable from Easter Event Shop for 10,000₵";
+cropInfo["Candy Sunflower"]  = "Buyable from Easter Event Shop for 75,000₵";
+cropInfo["Easter Egg"]       = "Buyable from Easter Event Shop for 500,000₵";
+cropInfo["Red Lollipop"]     = "Buyable from Easter Event Shop for 45,000₵";
+cropInfo["Candy Blossom"]    = "Buyable from Easter Event Shop for 10,000,000₵";
+cropInfo["Nightshade"]       = "Dropped from Night Seed Pack (35% chance)";
+cropInfo["Glowshroom"]       = "Dropped from Night Seed Pack (19.5% chance); Premium Night Seed Pack (30% chance)";
+cropInfo["Mint"]             = "Dropped from Night Seed Pack (14.3% chance); Premium Night Seed Pack (22% chance)";
+cropInfo["Moonflower"]       = "Dropped from Night Seed Pack (11.7% chance); Premium Night Seed Pack (18% chance)";
+cropInfo["Starfruit"]        = "Dropped from Night Seed Pack (10.08% chance); Premium Night Seed Pack (15.5% chance)";
+cropInfo["Moonglow"]         = "Dropped from Night Seed Pack (7.8% chance); Premium Night Seed Pack (12% chance)";
+cropInfo["Moon Blossom"]     = "Dropped from Night Seed Pack (1.63% chance); Premium Night Seed Pack (2.5% chance)";
+cropInfo["Blood Banana"]     = "Buyable from Blood Moon Shop for 200,000₵ when in stock";
+cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when in stock";
 
+
+      });
+     // ── END: placeholders ──
+     
       let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
       let sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
 
-      function createCategorySection(name, crops) {
-        const section = document.createElement('details');
-        section.className = 'category-section';
-        section.innerHTML = `
-          <summary>${name}</summary>
-          ${crops.map(crop => `
-            <button data-crop="${crop}" onclick="selectPlant('${name}', '${crop}')">
-              ${crop}
-              <span class="star-icon" onclick="toggleFavorite('${crop}', event); event.stopPropagation()">☆</span>
-            </button>
-          `).join('')}
-        `;
-        return section;
-      }
+    function createCategorySection(name, crops) {
+  const section = document.createElement('details');
+  section.className = 'category-section';
+  section.innerHTML = `
+    <summary>${name}</summary>
+    ${crops.map(crop => {
+      // check if this crop is in favorites
+      const isFav = favorites.includes(crop);
+      return `
+        <button data-crop="${crop}" onclick="selectPlant('${name}', '${crop}')">
+          ${crop}
+          <span 
+            class="star-icon ${isFav ? 'active' : ''}" 
+            onclick="toggleFavorite('${crop}', event); event.stopPropagation()"
+          >
+            ${isFav ? '★' : '☆'}
+          </span>
+        </button>
+      `;
+    }).join('')}`;
+  return section;
+}
+
 
       const sidebar = document.getElementById('sidebar');
       Object.entries(categories).forEach(([name, crops]) => {
@@ -968,20 +1051,15 @@
       }
 
       window.toggleFavorite = function(crop, event) {
-        event.stopPropagation();
-        favorites = favorites.includes(crop) ?
-          favorites.filter(f => f !== crop) :
-          [...favorites, crop];
-        
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        updateFavoritesDisplay();
-      }
+    event.stopPropagation();
+    favorites = favorites.includes(crop)
+      ? favorites.filter(f => f !== crop)
+      : [...favorites, crop];
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    updateFavoritesDisplay();
+    updateCategoryStars();    // ← SYNC ALL STARS IMMEDIATELY
+  }
 
-      document.getElementById('sidebarToggle').addEventListener('click', () => {
-        sidebarCollapsed = !sidebarCollapsed;
-        sidebar.classList.toggle('collapsed', sidebarCollapsed);
-        localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
-      });
 
       document.getElementById('sidebarSearch').addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase();
@@ -1096,7 +1174,22 @@
           "Moon Melon": "https://static.wikia.nocookie.net/growagarden/images/4/4f/Moon_Melon_Icon.png/revision/latest?cb=20250517140316"
         };
         const imageUrl = cropImageMap[crop] || '';
-        tr.innerHTML = `<td style="display:flex; align-items:center; gap:10px;"><img src="${imageUrl}" alt="${crop}" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='https://via.placeholder.com/28x28?text=❌';" style="width:28px; height:28px; border-radius:4px;"> <span style='color:#fff; font-weight:bold;'>${crop}</span></td><td>₵${basePrices[crop] || 'N/A'}</td>`;
+        const tooltipText = cropInfo[crop] || crop;
+        tr.innerHTML = `
+          <td style="display:flex; align-items:center; gap:10px;">
+            <span class="tooltip" data-tooltip="${tooltipText}">
+              <img
+                src="${imageUrl}"
+                alt="${crop}"
+                referrerpolicy="no-referrer"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/28x28?text=❌';"
+                style="width:28px; height:28px; border-radius:4px;"
+              >
+            </span>
+            <span style="color:#fff; font-weight:bold; margin-left:8px;">${crop}</span>
+          </td>
+          <td>₵${basePrices[crop] || 'N/A'}</td>
+        `;
         statsBody.appendChild(tr);
       });
 
@@ -1295,7 +1388,18 @@
           price: price,
           html: `${formattedName} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`
         };
-        
+            // … code that creates categories …
+    Object.entries(categories).forEach(([name, crops]) => {
+      sidebar.appendChild(createCategorySection(name, crops));
+    });
+    // ──────────────────────────────────────
+    
+
+    // … your existing calls to updateFavoritesDisplay(), updateMultiplier(), etc. …
+    updateFavoritesDisplay();
+    updateCategoryStars();    // ← ensure this runs on page load
+    sidebar.classList.toggle('collapsed', sidebarCollapsed);
+
         document.getElementById('calc-output').innerHTML = entry.html;
         document.getElementById('result').innerHTML = entry.html;
         document.getElementById('result').style.display = 'block';
@@ -1326,14 +1430,22 @@
         errorDisplay.style.display = 'none';
         return true;
       };
-
-      window.clearPlantSearch = function() {
-        document.getElementById('plantSearch').value = '';
-        Array.from(document.getElementById('plant-select').options).forEach(option => {
-          option.style.display = 'block';
-        });
-      };
-
+// Call this any time `favorites` changes
+function updateCategoryStars() {
+  document.querySelectorAll('.category-section button').forEach(btn => {
+    const crop = btn.getAttribute('data-crop');
+    const star = btn.querySelector('.star-icon');
+    if (!star) return;
+    
+    if (favorites.includes(crop)) {
+      star.classList.add('active');
+      star.textContent = '★';
+    } else {
+      star.classList.remove('active');
+      star.textContent = '☆';
+    }
+  });
+}
       window.clearHistory = function() {
         localStorage.removeItem('gardenCalculations');
         calculationHistory = [];
