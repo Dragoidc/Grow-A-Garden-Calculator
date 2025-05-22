@@ -452,18 +452,25 @@ if (variant !== 'Normal') {
     '</span>'
   );
 
-       const activeMutationChips = Array.from(document.querySelectorAll('.mutation-chip.active'));
-if (activeMutationChips.length > 0) {
-  const coloredMutationSpans = activeMutationChips.map(chip => {
-    const mutationName = chip.textContent; // e.g., "Shocked"
-    let mutClass = '';
-    // Apply classes based on the original mutation name
-    if (mutationName === 'Shocked') mutClass = 'shocked-text';
-    else if (mutationName === 'Frozen') mutClass = 'frozen-text';
-    // ... (all your other 'else if' for mutations)
-    else if (mutationName === 'Disco') mutClass = 'disco-text';
-  return `<span class="<span class="math-inline">\{mutClass\}"\></span>{mutationName.toLowerCase()}</span>`; // Correct
-  });
+      const activeMutationChips = Array.from(document.querySelectorAll('.mutation-chip.active'));
+  if (activeMutationChips.length > 0) {
+    const coloredMutationSpans = activeMutationChips.map(chip => {
+      const mutationName = chip.textContent; 
+      let mutClass = '';
+      if (mutationName === 'Shocked') mutClass = 'shocked-text';
+      else if (mutationName === 'Frozen') mutClass = 'frozen-text';
+      else if (mutationName === 'Wet') mutClass = 'wet-text';
+      else if (mutationName === 'Chilled') mutClass = 'chilled-text';
+      else if (mutationName === 'Chocolate') mutClass = 'chocolate-text';
+      else if (mutationName === 'Moonlit') mutClass = 'moonlit-text';
+      else if (mutationName === 'Bloodlit') mutClass = 'bloodlit-text';
+      else if (mutationName === 'Zombified') mutClass = 'zombified-text';
+      else if (mutationName === 'Celestial') mutClass = 'celestial-text';
+      else if (mutationName === 'Disco') mutClass = 'disco-text';
+      
+      // FIX #2: Corrected return statement
+      return `<span class="${mutClass}">${mutationName.toLowerCase()}</span>`;
+    });
   formattedParts = formattedParts.concat(coloredMutationSpans);
 }
         
