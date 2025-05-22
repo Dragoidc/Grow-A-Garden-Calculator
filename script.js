@@ -412,7 +412,6 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
     // Mean of Min/Max
     const totalMean  = (totalMin + totalMax) / 2;
     const price      = totalMean;
-
     const variantBtn        = document.querySelector('.variant-buttons button.active');
     const variant           = variantBtn.textContent;
     const activeMutations   = Array.from(document.querySelectorAll('.mutation-chip.active'))
@@ -426,7 +425,7 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
       mass:       mass,
       multiplier: multiplier,
       price:      price,
-      html:       `${formattedName} (${mass.toFixed(2)}kg × ${multiplier.toFixed(2)}) → ₵${price.toFixed(2)}`
+      html:       ${formattedName} (${mass.toFixed(2)}kg × ${multiplier.toFixed(2)}) → ₵${price.toFixed(2)}
     };
 
     // … updateFavoritesDisplay(), updateHistoryDisplay(), DOM writes …
