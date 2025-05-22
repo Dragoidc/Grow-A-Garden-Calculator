@@ -218,7 +218,7 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
         }
       };
 
-      const calculationHistory = JSON.parse(localStorage.getItem('gardenCalculations')) || [];
+      let calculationHistory = JSON.parse(localStorage.getItem('gardenCalculations')) || [];
 
       const statsBody = document.getElementById('stats-body');
       Object.values(categories).flat().forEach(crop => {
@@ -384,29 +384,29 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
         document.body.style.overflow = 'auto';
       };
 
-      window.calculate = function() {
+window.calculate = function() {
         if (!validateMass()) return;
 
         const plant = document.getElementById('plant-select').value;
         const mass = parseFloat(document.getElementById('mass').value);
         const mult = parseFloat(document.getElementById('multiplier').value);
-        
+
         const basePrice = basePrices[plant] || 100;
         const price = Math.floor(mass * mass * basePrice * mult);
-        
+
         const variantBtn = document.querySelector('.variant-buttons button.active');
         const variant = variantBtn.textContent;
-        
+
         const activeMutations = Array.from(document.querySelectorAll('.mutation-chip.active'))
           .map(chip => chip.textContent);
-        
+
         let formattedParts = [];
-        
+
         if (variant !== 'Normal') {
           const variantClass = variant === 'Golden' ? 'golden-text' : 'rainbow-text';
           formattedParts.push(`<span class="${variantClass}">${variant.toLowerCase()}</span>`);
         }
-        
+
         if (activeMutations.length > 0) {
           const formattedMutations = activeMutations.map(mut => {
             let mutClass = '';
@@ -424,7 +424,7 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
           });
           formattedParts = formattedParts.concat(formattedMutations);
         }
-        
+
         let color = '';
         switch (plant) {
           case 'Carrot': color = '#FFA500'; break;
@@ -478,9 +478,9 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
           case 'Lotus': color = '#FFE4E1'; break;
         }
         formattedParts.push(`<span style="color:${color}; font-weight:bold;">${plant.toLowerCase()}</span>`);
-        
+
         const formattedName = formattedParts.join(' ');
-        
+
         const entry = {
           timestamp: new Date().toISOString(),
           plant: plant,
@@ -489,26 +489,22 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
           price: price,
           html: `${formattedName} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`
         };
-            // … code that creates categories …
-    Object.entries(categories).forEach(([name, crops]) => {
-      sidebar.appendChild(createCategorySection(name, crops));
-    });
-    // ──────────────────────────────────────
-    
 
-    // … your existing calls to updateFavoritesDisplay(), updateMultiplier(), etc. …
-    updateFavoritesDisplay();
-    updateCategoryStars();    // ← ensure this runs on page load
-    sidebar.classList.toggle('collapsed', sidebarCollapsed);
+        // The category creation and sidebar toggle were removed from here.
+        // updateFavoritesDisplay and updateCategoryStars are fine if they only update existing elements,
+        // but ensure they aren't also trying to re-create elements.
+        // Given their names, they should be okay.
+        updateFavoritesDisplay();
+        updateCategoryStars();
 
         document.getElementById('calc-output').innerHTML = entry.html;
         document.getElementById('result').innerHTML = entry.html;
         document.getElementById('result').style.display = 'block';
-        
+
         calculationHistory.unshift(entry);
         if (calculationHistory.length > 10) calculationHistory.pop();
         localStorage.setItem('gardenCalculations', JSON.stringify(calculationHistory));
-        
+
         updateHistoryDisplay();
       };
 
