@@ -399,14 +399,31 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
       };
 
       window.calculate = function() {
-        if (!validateMass()) return;
+  if (!validateMass()) return;
 
-        const plant = document.getElementById('plant-select').value;
-        const mass = parseFloat(document.getElementById('mass').value);
-        const mult = parseFloat(document.getElementById('multiplier').value);
-        
-        const basePrice = basePrices[plant] || 100;
-        const price = Math.floor(mass * mass * basePrice * mult);
+
+  const plant      = document.getElementById('plant-select').value;
+  const mass       = parseFloat(document.getElementById('mass').value);
+  const multiplier = parseFloat(document.getElementById('multiplier').value);
+
+
+  const basePrice = basePrices[plant] || 100;
+
+  //  ±0.005 kg range
+  const kgMin = mass - 0.005;
+  const kgMax = mass + 0.005;
+
+  // Formula fro Min-Max 
+  const totalMin  = basePrice * (kgMin ** 2) * multiplier;
+  const totalMax  = basePrice * (kgMax ** 2) * multiplier;
+
+  // Mean of Min/Max
+  const totalMean = (totalMin + totalMax) / 2;
+
+
+  const price = totalMean;
+};
+
         
         const variantBtn = document.querySelector('.variant-buttons button.active');
         const variant = variantBtn.textContent;
