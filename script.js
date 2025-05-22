@@ -429,7 +429,7 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
     plant:      plant,
     mass:       mass,
     multiplier: multiplier,
-    price:      price,
+    price:      price(5),
     html:       `${formattedName} (${mass.toFixed(2)}kg × ${multiplier.toFixed(2)}) → ₵${price.toFixed(2)}`
   };
 
