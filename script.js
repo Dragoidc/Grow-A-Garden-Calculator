@@ -399,30 +399,31 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
       };
 
       window.calculate = function() {
-        if (!validateMass()) return;
+  if (!validateMass()) return;
 
-        const plant = document.getElementById('plant-select').value;
-        const mass = parseFloat(document.getElementById('mass').value);
-        const mult = parseFloat(document.getElementById('multiplier').value);
-        
-        const basePrice = basePrices[plant] || 100;
-        // compute your ±0.005 kg bounds
-        const kgMin = kg - 0.005;
-        const kgMax = kg + 0.005;
 
-        // compute total for each bound
-        const totalMin  = pricePerKg * (kgMin ** 2) * mutationMultiplier;
-        const totalMax  = pricePerKg * (kgMax ** 2) * mutationMultiplier;
+  const plant      = document.getElementById('plant-select').value;
+  const mass       = parseFloat(document.getElementById('mass').value);
+  const multiplier = parseFloat(document.getElementById('multiplier').value);
 
-        // compute the mean of those two
-        const totalMean = (totalMin + totalMax) / 2;
-    
-        // now display or return totalMin, totalMean, totalMax
-        console.log({
-          min:  totalMin,
-          mean: totalMean,
-          max:  totalMax
-        });
+
+  const basePrice = basePrices[plant] || 100;
+
+  //  ±0.005 kg range
+  const kgMin = mass - 0.005;
+  const kgMax = mass + 0.005;
+
+  // Formula fro Min-Max 
+  const totalMin  = basePrice * (kgMin ** 2) * multiplier;
+  const totalMax  = basePrice * (kgMax ** 2) * multiplier;
+
+  // Mean of Min/Max
+  const totalMean = (totalMin + totalMax) / 2;
+
+
+  const price = totalMean;
+};
+
         
         const variantBtn = document.querySelector('.variant-buttons button.active');
         const variant = variantBtn.textContent;
