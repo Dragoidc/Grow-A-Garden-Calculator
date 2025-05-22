@@ -443,11 +443,7 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
 
   updateFavoritesDisplay();
 };
-        const variantBtn = document.querySelector('.variant-buttons button.active');
-        const variant = variantBtn.textContent;
-        const activeMutations = Array.from(document.querySelectorAll('.mutation-chip.active'))
-          .map(chip => chip.textContent);
-        
+
         let formattedParts = [];
         
         if (variant !== 'Normal') {
