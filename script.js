@@ -416,7 +416,12 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
   // 4. Totals
   var minTotal = minMass * basePrice * mult;
   var maxTotal = maxMass * basePrice * mult;
-
+  let formattedParts = [];
+// (var btn, var variant, var cls are already defined from the 'parts' array logic)
+if (variant !== 'Normal') {
+  // 'cls' is already defined from the 'parts' array logic, e.g. var cls = (variant === 'Golden') ...
+  formattedParts.push(`<span class="<span class="math-inline">\{cls\}"\></span>{variant.toLowerCase()}</span>`);
+}
   // 5. Build the pieces of the result
   var parts = [];
 
@@ -447,29 +452,20 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
     '</span>'
   );
 
-  // 6. Output
-  document.getElementById('result').innerHTML = parts.join(' ');
-};
-
-
-        
-        if (activeMutations.length > 0) {
-          const formattedMutations = activeMutations.map(mut => {
-            let mutClass = '';
-            if (mut === 'Shocked') mutClass = 'shocked-text';
-            else if (mut === 'Frozen') mutClass = 'frozen-text';
-            else if (mut === 'Wet') mutClass = 'wet-text';
-            else if (mut === 'Chilled') mutClass = 'chilled-text';
-            else if (mut === 'Chocolate') mutClass = 'chocolate-text';
-            else if (mut === 'Moonlit') mutClass = 'moonlit-text';
-            else if (mut === 'Bloodlit') mutClass = 'bloodlit-text';
-            else if (mut === 'Zombified') mutClass = 'zombified-text';
-            else if (mut === 'Celestial') mutClass = 'celestial-text';
-            else if (mut === 'Disco') mutClass = 'disco-text';
-            return `<span class="${mutClass}">${mut.toLowerCase()}</span>`;
-          });
-          formattedParts = formattedParts.concat(formattedMutations);
-        }
+       const activeMutationChips = Array.from(document.querySelectorAll('.mutation-chip.active'));
+if (activeMutationChips.length > 0) {
+  const coloredMutationSpans = activeMutationChips.map(chip => {
+    const mutationName = chip.textContent; // e.g., "Shocked"
+    let mutClass = '';
+    // Apply classes based on the original mutation name
+    if (mutationName === 'Shocked') mutClass = 'shocked-text';
+    else if (mutationName === 'Frozen') mutClass = 'frozen-text';
+    // ... (all your other 'else if' for mutations)
+    else if (mutationName === 'Disco') mutClass = 'disco-text';
+  return `<span class="<span class="math-inline">\{mutClass\}"\></span>{mutationName.toLowerCase()}</span>`; // Correct
+  });
+  formattedParts = formattedParts.concat(coloredMutationSpans);
+}
         
         let color = '';
         switch (plant) {
@@ -526,15 +522,19 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
         formattedParts.push(`<span style="color:${color}; font-weight:bold;">${plant.toLowerCase()}</span>`);
         
         const formattedName = formattedParts.join(' ');
-        
-        const entry = {
-          timestamp: new Date().toISOString(),
-          plant: plant,
-          mass: mass,
-          multiplier: mult,
-          price: price,
-          html: `${formattedName} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`
-        };
+
+     const price = maxTotal; // Or minTotal, or an average like (minTotal + maxTotal) / 2
+     
+        const price = maxTotal; // This should be just before the entry object
+
+const entry = {
+  timestamp: new Date().toISOString(),
+  plant: plant,
+  mass: mass,
+  multiplier: mult,
+  price: price, // Single 'price' property
+  html: `<span class="math-inline">\{formattedName\} \(</span>{mass.toFixed(2)}kg × <span class="math-inline">\{mult\.toFixed\(2\)\}\) → ₵</span>{price.toFixed(2)}` // Single, correctly formatted 'html' property
+};
     
     
 
