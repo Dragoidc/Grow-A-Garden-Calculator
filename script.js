@@ -1,17 +1,30 @@
 
     document.addEventListener('DOMContentLoaded', () => {
-      const categories = {
-  "Public Crops": ["Carrot","Strawberry","Blueberry","Orange Tulip","Tomato","Corn","Daffodil","Watermelon","Pumpkin",
-  "Apple","Bamboo","Coconut","Cactus","Dragon Fruit","Mango","Grape","Mushroom","Pepper","Cacao","Beanstalk"],
-          
-  "Seed Pack": ["Lemon","Pineapple","Peach","Raspberry","Pear", "Cranberry","Durian","Eggplant","Venus Flytrap","Lotus"],
-          
-  "Exotic Seed Pack": ["Papaya","Banana","Passionfruit","Soul Fruit","Cursed Fruit"],
-          
-  "Easter Event": ["Chocolate Carrot","Candy Sunflower","Easter Egg","Red Lollipop","Candy Blossom"],
-          
-  "Lunar Glow Event": ["Nightshade","Glowshroom","Mint","Moonflower","Starfruit","Moonglow","Moon Blossom","Blood Banana","Moon Melon"]
+const categories = {
+  "Public Crops": [
+    "Carrot","Strawberry","Blueberry","Orange Tulip","Tomato",
+    "Corn","Daffodil","Watermelon","Pumpkin","Apple",
+    "Bamboo","Coconut","Cactus","Dragon Fruit","Mango",
+    "Grape","Mushroom","Pepper","Cacao","Beanstalk"
+  ],
+  "Seed Pack": [
+    "Lemon","Pineapple","Peach","Raspberry","Pear",
+    "Cranberry","Durian","Eggplant","Venus Flytrap","Lotus"
+  ],
+  "Exotic Seed Pack": [
+    "Papaya","Banana","Passionfruit","Soul Fruit","Cursed Fruit"
+  ],
+  "Easter Event": [
+    "Chocolate Carrot","Candy Sunflower","Easter Egg",
+    "Red Lollipop","Candy Blossom"
+  ],
+  "Lunar Glow Event": [
+    "Nightshade","Glowshroom","Mint","Moonflower",
+    "Starfruit","Moonglow","Moon Blossom","Blood Banana",
+    "Moon Melon"
+  ]
 };
+
 
 
       const basePrices = {
