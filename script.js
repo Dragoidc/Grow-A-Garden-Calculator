@@ -406,7 +406,7 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
         const mult = parseFloat(document.getElementById('multiplier').value);
         
         const basePrice = basePrices[plant] || 100;
-        const price = Math.floor(mass * mass * basePrice * mult);
+      const total = pricePerKg * (kg ** 2) * mutationMultiplier;
         
         const variantBtn = document.querySelector('.variant-buttons button.active');
         const variant = variantBtn.textContent;
