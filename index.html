@@ -1,9 +1,9 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Grow a Garden Calculator</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
@@ -29,23 +29,23 @@
       <input type="number" id="mass" step="0.01" min="0.01" max="9999" placeholder="e.g. 24.02" oninput="validateMass()">
       <p class="input-hint">Allowed range: 0.01 - 9999 kg</p>
       <p class="validation-error" id="massError"></p>
-      
+
       <div class="mutation-section">
         <h4>Mutations</h4>
         <div class="mutation-chips" id="mutation-chips"></div>
-        
+
         <h4>Variants</h4>
         <div class="variant-buttons">
           <button class="active" data-mult="1">Normal</button>
           <button data-mult="20">Golden</button>
           <button data-mult="50">Rainbow</button>
         </div>
-        
+
         <div class="current-multiplier">
           Active Multiplier: <span id="active-multiplier">1</span>
         </div>
       </div>
-      
+
       <input type="hidden" id="multiplier" value="1">
       <button onclick="calculate()">Calculate</button>
       <div class="result" id="result" style="display:none;"></div>
@@ -101,5 +101,7 @@
   <footer>
     <p><a href="#">Grow a Garden Wiki</a> | <a href="#">Discord</a> | <a href="#">GitHub Source</a></p>
   </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
