@@ -1,5 +1,4 @@
-    document.addEventListener('DOMContentLoaded', () => {
-      const categories = {
+    const categories = {
         "Public Crops": [
           "Carrot","Strawberry","Blueberry","Orange Tulip","Tomato",
           "Corn","Daffodil","Watermelon","Pumpkin","Apple",
@@ -48,6 +47,35 @@
         "Blood Banana": 4198,
         "Moon Melon": 711
       };
+       let calculationHistory = JSON.parse(localStorage.getItem('gardenCalculations')) || [];
+    // —— Page-load setup ——
+document.addEventListener('DOMContentLoaded', () => {
+  const sidebar = document.getElementById('sidebar');
+  Object.entries(categories).forEach(([name, crops]) =>
+    sidebar.appendChild(createCategorySection(name, crops))
+  );
+
+  // Clear history button
+  document.querySelector('.clear-btn').addEventListener('click', () => {
+    calculationHistory = [];
+    localStorage.removeItem('gardenCalculations');
+    updateHistoryDisplay();
+  });
+
+  // Wire the Calculate button
+  document.getElementById('calculate-btn')
+          .addEventListener('click', calculate);
+
+
+
+  // Initial renders
+ updateFavoritesDisplay();
+updateCategoryStars();
+updateMultiplier();
+updateHistoryDisplay();
+sidebar.classList.toggle('collapsed', sidebarCollapsed);
+
+     
       
     // ── START: “how obtained” placeholders ──
       const cropInfo = {};
@@ -132,12 +160,6 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
   return section;
 }
 
-
-      const sidebar = document.getElementById('sidebar');
-      Object.entries(categories).forEach(([name, crops]) => {
-        sidebar.appendChild(createCategorySection(name, crops));
-      });
-
       function updateFavoritesDisplay() {
         const favoritesList = document.getElementById('favoritesList');
         favoritesList.innerHTML = favorites.map(crop => `
@@ -217,8 +239,6 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
           selectPlant(category, crop);
         }
       };
-
-      let calculationHistory = JSON.parse(localStorage.getItem('gardenCalculations')) || [];
 
       const statsBody = document.getElementById('stats-body');
       Object.values(categories).flat().forEach(crop => {
@@ -543,18 +563,10 @@ function updateCategoryStars() {
     }
   });
 }
-      window.clearHistory = function() {
-        localStorage.removeItem('gardenCalculations');
-        calculationHistory = [];
-        updateHistoryDisplay();
-      };
 
       window.toggleHistoryView = function() {
         document.getElementById('history-list').classList.toggle('compact-view');
       };
 
-      updateMultiplier();
-      updateHistoryDisplay();
-      sidebar.classList.toggle('collapsed', sidebarCollapsed);
-      updateFavoritesDisplay();
+     
     });
