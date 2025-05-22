@@ -425,7 +425,7 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
       mass:       mass,
       multiplier: multiplier,
       price:      price,
-      html:       ${formattedName} (${mass.toFixed(2)}kg × ${multiplier.toFixed(2)}) → ₵${price.toFixed(2)}
+      html:       `${formattedName} (${mass.toFixed(2)}kg × ${multiplier.toFixed(2)}) → ₵${price.toFixed(2)}`
     };
 
     // … updateFavoritesDisplay(), updateHistoryDisplay(), DOM writes …
