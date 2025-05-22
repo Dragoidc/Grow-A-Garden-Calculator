@@ -406,7 +406,23 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
         const mult = parseFloat(document.getElementById('multiplier').value);
         
         const basePrice = basePrices[plant] || 100;
-        const price = Math.floor(mass * mass * basePrice * mult);
+        // compute your ±0.005 kg bounds
+        const kgMin = kg - 0.005;
+        const kgMax = kg + 0.005;
+
+        // compute total for each bound
+        const totalMin  = pricePerKg * (kgMin ** 2) * mutationMultiplier;
+        const totalMax  = pricePerKg * (kgMax ** 2) * mutationMultiplier;
+
+        // compute the mean of those two
+        const totalMean = (totalMin + totalMax) / 2;
+    
+        // now display or return totalMin, totalMean, totalMax
+        console.log({
+          min:  totalMin,
+          mean: totalMean,
+          max:  totalMax
+        });
         
         const variantBtn = document.querySelector('.variant-buttons button.active');
         const variant = variantBtn.textContent;
