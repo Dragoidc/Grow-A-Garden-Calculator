@@ -431,7 +431,7 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
   // Mutations list
   var muts = Array.from(
     document.querySelectorAll('.mutation-chip.active')
-  ).map(function(chip) {
+  .map(function(chip) {
     return chip.textContent.toLowerCase();
   });
   if (muts.length) {
