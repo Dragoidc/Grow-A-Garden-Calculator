@@ -398,51 +398,59 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
         document.body.style.overflow = 'auto';
       };
 
-     window.calculate = function() {
+ window.calculate = function() {
   if (!validateMass()) return;
 
-  // 1. Grab inputs
-  const plant = document.getElementById('plant-select').value;
-  const mass  = parseFloat(document.getElementById('mass').value);
-  const mult  = parseFloat(document.getElementById('multiplier').value);
+  // 1. Inputs
+  var plant = document.getElementById('plant-select').value;
+  var mass  = parseFloat(document.getElementById('mass').value);
+  var mult  = parseFloat(document.getElementById('multiplier').value);
 
-  // 2. Base price per kg (your existing map)
-  const basePrice = basePrices[plant] || 100;
+  // 2. Base price per kg
+  var basePrice = basePrices[plant] || 100;
 
-  // 3. Build a ±0.005 kg window
-  const minMass = Math.max(0, mass - 0.005);
-  const maxMass = mass + 0.005;
+  // 3. Compute ±0.005-kg bounds
+  var minMass = Math.max(0, mass - 0.005);
+  var maxMass = mass + 0.005;
 
-  // 4. Compute min/max totals (including multiplier)
-  const minTotal = minMass * basePrice * mult;
-  const maxTotal = maxMass * basePrice * mult;
+  // 4. Totals
+  var minTotal = minMass * basePrice * mult;
+  var maxTotal = maxMass * basePrice * mult;
 
-  // 5. Prepare the formatted parts array
-  let formattedParts = [];
+  // 5. Build the pieces of the result
+  var parts = [];
 
-  // Variant badge (if not Normal)
-  const variantBtn = document.querySelector('.variant-buttons button.active');
-  const variant = variantBtn.textContent;
+  // Variant badge
+  var btn = document.querySelector('.variant-buttons button.active');
+  var variant = btn ? btn.textContent : 'Normal';
   if (variant !== 'Normal') {
-    const variantClass = variant === 'Golden' ? 'golden-text' : 'rainbow-text';
-    formattedParts.push(`<span class="${variantClass}">${variant.toLowerCase()}</span>`);
+    var cls = (variant === 'Golden') ? 'golden-text' : 'rainbow-text';
+    parts.push('<span class="' + cls + '">' + variant.toLowerCase() + '</span>');
   }
 
-  // Mutation list (if any)
-  const activeMuts = Array.from(document.querySelectorAll('.mutation-chip.active'))
-    .map(chip => chip.textContent.toLowerCase());
-  if (activeMuts.length) {
-    formattedParts.push(`<span class="mutation-text">${activeMuts.join(', ')}</span>`);
+  // Mutations list
+  var muts = Array.from(
+    document.querySelectorAll('.mutation-chip.active')
+  ).map(function(chip) {
+    return chip.textContent.toLowerCase();
+  });
+  if (muts.length) {
+    parts.push('<span class="mutation-text">' + muts.join(', ') + '</span>');
   }
 
-  // 6. Push the price range
-  formattedParts.push(
-    `<span class="price">$${minTotal.toFixed(2)} - $${maxTotal.toFixed(2)}</span>`
+  // Price range
+  parts.push(
+    '<span class="price">$' +
+    minTotal.toFixed(2) +
+    ' - $' +
+    maxTotal.toFixed(2) +
+    '</span>'
   );
 
-  // 7. Inject into the page
-  document.getElementById('result').innerHTML = formattedParts.join(' ');
+  // 6. Output
+  document.getElementById('result').innerHTML = parts.join(' ');
 };
+
 
         
         if (activeMutations.length > 0) {
