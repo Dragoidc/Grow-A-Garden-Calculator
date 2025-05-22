@@ -398,41 +398,51 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
         document.body.style.overflow = 'auto';
       };
 
-       window.calculate = function() {
-    if (!validateMass()) return;
+     window.calculate = function() {
+  if (!validateMass()) return;
 
-    // … grab plant, mass, multiplier …
-    const basePrice  = basePrices[plant] || 100;
-    //  ±0.005 kg range
-    const kgMin      = mass - 0.005;
-    const kgMax      = mass + 0.005;
-    // Formula fro Min-Max        
-    const totalMin   = basePrice * (kgMin ** 2) * multiplier;
-    const totalMax   = basePrice * (kgMax ** 2) * multiplier;
-    // Mean of Min/Max
-    const totalMean  = (totalMin + totalMax) / 2;
-    const price      = totalMean;
-    const variantBtn        = document.querySelector('.variant-buttons button.active');
-    const variant           = variantBtn.textContent;
-    const activeMutations   = Array.from(document.querySelectorAll('.mutation-chip.active'))
-                                   .map(c => c.textContent);
-    let formattedParts      = [];
-    // … build formattedParts …
-    // pick correct variable name here ↓
-    const entry = {
-      timestamp:  new Date().toISOString(),
-      plant:      plant,
-      mass:       mass,
-      multiplier: multiplier,
-      price:      price,
-      html:       `${formattedName} (${mass.toFixed(2)}kg × ${multiplier.toFixed(2)}) → ₵${price.toFixed(2)}`
-    };
+  const plant      = document.getElementById('plant-select').value;
+  const mass       = parseFloat(document.getElementById('mass').value);
+  const multiplier = parseFloat(document.getElementById('multiplier').value);
 
-    // … updateFavoritesDisplay(), updateHistoryDisplay(), DOM writes …
-    document.getElementById('calc-output').innerHTML = entry.html;
-    document.getElementById('result').innerHTML      = entry.html;
-    document.getElementById('result').style.display  = 'block';
-  };  
+  const basePrice = basePrices[plant] || 100;
+
+  const kgMin = mass - 0.005;
+  const kgMax = mass + 0.005;
+
+  const totalMin  = basePrice * (kgMin ** 2) * multiplier;
+  const totalMax  = basePrice * (kgMax ** 2) * multiplier;
+  const totalMean = (totalMin + totalMax) / 2;
+
+  const price = totalMean;
+
+  const variantBtn      = document.querySelector('.variant-buttons button.active');
+  const variant         = variantBtn.textContent;
+  const activeMutations = Array.from(
+    document.querySelectorAll('.mutation-chip.active')
+  ).map(chip => chip.textContent);
+  const formattedParts  = [variant, plant, ...activeMutations].filter(Boolean);
+  const formattedName   = formattedParts.join(' ');
+
+  const entry = {
+    timestamp:  new Date().toISOString(),
+    plant:      plant,
+    mass:       mass,
+    multiplier: multiplier,
+    price:      price,
+    html:       `${formattedName} (${mass.toFixed(2)}kg × ${multiplier.toFixed(2)}) → ₵${price.toFixed(2)}`
+  };
+
+  document.getElementById('calc-output').innerHTML = entry.html;
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = entry.html;
+  resultDiv.style.display = 'block';
+
+  calculationHistory.push(entry);
+  renderHistory();
+
+  updateFavoritesDisplay();
+};
         const variantBtn = document.querySelector('.variant-buttons button.active');
         const variant = variantBtn.textContent;
         const activeMutations = Array.from(document.querySelectorAll('.mutation-chip.active'))
