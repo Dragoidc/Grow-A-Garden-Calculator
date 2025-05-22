@@ -1,7 +1,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       const categories = {
-      const categories = {
   "Public Crops": ["Carrot","Strawberry","Blueberry","Orange Tulip","Tomato","Corn","Daffodil","Watermelon","Pumpkin",
   "Apple","Bamboo","Coconut","Cactus","Dragon Fruit","Mango","Grape","Mushroom","Pepper","Cacao","Beanstalk"],
           
