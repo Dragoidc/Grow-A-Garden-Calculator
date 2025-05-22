@@ -398,28 +398,52 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
         document.body.style.overflow = 'auto';
       };
 
-      window.calculate = function() {
-        if (!validateMass()) return;
+     window.calculate = function() {
+  if (!validateMass()) return;
 
-        const plant = document.getElementById('plant-select').value;
-        const mass = parseFloat(document.getElementById('mass').value);
-        const mult = parseFloat(document.getElementById('multiplier').value);
-        
-        const basePrice = basePrices[plant] || 100;
-      const total = pricePerKg * (kg ** 2) * mutationMultiplier;
-        
-        const variantBtn = document.querySelector('.variant-buttons button.active');
-        const variant = variantBtn.textContent;
-        
-        const activeMutations = Array.from(document.querySelectorAll('.mutation-chip.active'))
-          .map(chip => chip.textContent);
-        
-        let formattedParts = [];
-        
-        if (variant !== 'Normal') {
-          const variantClass = variant === 'Golden' ? 'golden-text' : 'rainbow-text';
-          formattedParts.push(`<span class="${variantClass}">${variant.toLowerCase()}</span>`);
-        }
+  // 1. Grab inputs
+  const plant = document.getElementById('plant-select').value;
+  const mass  = parseFloat(document.getElementById('mass').value);
+  const mult  = parseFloat(document.getElementById('multiplier').value);
+
+  // 2. Base price per kg (your existing map)
+  const basePrice = basePrices[plant] || 100;
+
+  // 3. Build a ±0.005 kg window
+  const minMass = Math.max(0, mass - 0.005);
+  const maxMass = mass + 0.005;
+
+  // 4. Compute min/max totals (including multiplier)
+  const minTotal = minMass * basePrice * mult;
+  const maxTotal = maxMass * basePrice * mult;
+
+  // 5. Prepare the formatted parts array
+  let formattedParts = [];
+
+  // Variant badge (if not Normal)
+  const variantBtn = document.querySelector('.variant-buttons button.active');
+  const variant = variantBtn.textContent;
+  if (variant !== 'Normal') {
+    const variantClass = variant === 'Golden' ? 'golden-text' : 'rainbow-text';
+    formattedParts.push(`<span class="${variantClass}">${variant.toLowerCase()}</span>`);
+  }
+
+  // Mutation list (if any)
+  const activeMuts = Array.from(document.querySelectorAll('.mutation-chip.active'))
+    .map(chip => chip.textContent.toLowerCase());
+  if (activeMuts.length) {
+    formattedParts.push(`<span class="mutation-text">${activeMuts.join(', ')}</span>`);
+  }
+
+  // 6. Push the price range
+  formattedParts.push(
+    `<span class="price">$${minTotal.toFixed(2)} - $${maxTotal.toFixed(2)}</span>`
+  );
+
+  // 7. Inject into the page
+  document.getElementById('result').innerHTML = formattedParts.join(' ');
+};
+
         
         if (activeMutations.length > 0) {
           const formattedMutations = activeMutations.map(mut => {
