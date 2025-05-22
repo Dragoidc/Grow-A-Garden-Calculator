@@ -48,6 +48,8 @@
         "Moon Melon": 711
       };
        let calculationHistory = JSON.parse(localStorage.getItem('gardenCalculations')) || [];
+       let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+       let sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
     // —— Page-load setup ——
 document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.getElementById('sidebar');
@@ -134,8 +136,7 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
       });
      // ── END: placeholders ──
      
-      let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-      let sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+      
 
     function createCategorySection(name, crops) {
   const section = document.createElement('details');
