@@ -439,11 +439,16 @@ var variant = variantButton ? variantButton.textContent : 'Normal';
   if (variant !== 'Normal') {
     var cls = (variant === 'Golden') ? 'golden-text' : 'rainbow-text';
     parts.push('<span class="' + cls + '">' + variant.toLowerCase() + '</span>');
- });
+ }
 
 var muts = Array.from(document.querySelectorAll('.mutation-chip.active'))
-  .map(chip => chip.textContent.toLowerCase());  // Fixed "L" in toLowerCase
+  .map(function(chip) {
+    return chip.textContent.toLowerCase();
+  });
 
+if (muts.length) {
+  parts.push('<span class="mutation-text">' + muts.join(', ') + '</span>');
+}
   // Price range
  // Replace the price parts section with:
 parts.push(
