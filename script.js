@@ -1,5 +1,4 @@
-
-    document.addEventListener('DOMContentLoaded', () => {
+ document.addEventListener('DOMContentLoaded', () => {
 const categories = {
   "Public Crops": [
     "Carrot","Strawberry","Blueberry","Orange Tulip","Tomato",
@@ -61,7 +60,17 @@ const categories = {
         "Blood Banana": 4198,
         "Moon Melon": 711
       };
-      
+      // Number formatting function
+function formatNumber(value) {
+  if (!Number.isFinite(value)) return '∞';
+  const absValue = Math.abs(value);
+  if (absValue >= 1_000_000_000_000_000) return (value/1_000_000_000_000_000).toFixed(2) + 'q';
+  if (absValue >= 1_000_000_000_000) return (value/1_000_000_000_000).toFixed(2) + 't';
+  if (absValue >= 1_000_000_000) return (value/1_000_000_000).toFixed(2) + 'b';
+  if (absValue >= 1_000_000) return (value/1_000_000).toFixed(2) + 'm';
+  if (absValue >= 1_000) return (value/1_000).toFixed(2) + 'k';
+  return value.toFixed(2);
+}
     // ── START: “how obtained” placeholders ──
       const cropInfo = {};
       Object.values(categories).flat().forEach(crop => {
@@ -399,8 +408,11 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
       };
 
  window.calculate = function() {
+    console.log('--- CALCULATION STARTED ---');
+    console.log('Plant:', document.getElementById('plant-select').value);
+    console.log('Mass:', document.getElementById('mass').value);
+    console.log('Multiplier:', document.getElementById('multiplier').value);
   if (!validateMass()) return;
-
   // 1. Inputs
   var plant = document.getElementById('plant-select').value;
   var mass  = parseFloat(document.getElementById('mass').value);
@@ -414,14 +426,10 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
   var maxMass = mass + 0.005;
 
   // 4. Totals
-  var minTotal = minMass * basePrice * mult;
-  var maxTotal = maxMass * basePrice * mult;
+var minTotal = Math.pow(minMass, 2) * basePrice * mult;
+var maxTotal = Math.pow(maxMass, 2) * basePrice * mult;
   let formattedParts = [];
-// (var btn, var variant, var cls are already defined from the 'parts' array logic)
-if (variant !== 'Normal') {
-  // 'cls' is already defined from the 'parts' array logic, e.g. var cls = (variant === 'Golden') ...
-  formattedParts.push(`<span class="<span class="math-inline">\{cls\}"\></span>{variant.toLowerCase()}</span>`);
-}
+
   // 5. Build the pieces of the result
   var parts = [];
 
@@ -433,24 +441,15 @@ if (variant !== 'Normal') {
     parts.push('<span class="' + cls + '">' + variant.toLowerCase() + '</span>');
   }
 
-  // Mutations list
-  var muts = Array.from(
-    document.querySelectorAll('.mutation-chip.active')
-  .map(function(chip) {
-    return chip.textContent.toLowerCase();
-  });
-  if (muts.length) {
-    parts.push('<span class="mutation-text">' + muts.join(', ') + '</span>');
-  }
+var muts = Array.from(document.querySelectorAll('.mutation-chip.active'))
+  .map(chip => chip.textContent.toLowerCase());  // Fixed "L" in toLowerCase
 
   // Price range
-  parts.push(
-    '<span class="price">$' +
-    minTotal.toFixed(2) +
-    ' - $' +
-    maxTotal.toFixed(2) +
-    '</span>'
-  );
+ // Replace the price parts section with:
+parts.push(
+  `<span class="price-range">₵${minTotal.toFixed(2)}</span> - ` +
+  `<span class="price-range">₵${maxTotal.toFixed(2)}</span>`
+);
 
       const activeMutationChips = Array.from(document.querySelectorAll('.mutation-chip.active'));
   if (activeMutationChips.length > 0) {
@@ -530,19 +529,20 @@ if (variant !== 'Normal') {
         
         const formattedName = formattedParts.join(' ');
 
-     const price = maxTotal; // Or minTotal, or an average like (minTotal + maxTotal) / 2
+     // Remove duplicate price declaration
+const priceRange = `${minTotal.toFixed(2)}-${maxTotal.toFixed(2)}`;
      
-        const price = maxTotal; // This should be just before the entry object
-
+  
 const entry = {
   timestamp: new Date().toISOString(),
   plant: plant,
   mass: mass,
   multiplier: mult,
-  price: price, // Single 'price' property
-  html: `<span class="math-inline">\{formattedName\} \(</span>{mass.toFixed(2)}kg × <span class="math-inline">\{mult\.toFixed\(2\)\}\) → ₵</span>{price.toFixed(2)}` // Single, correctly formatted 'html' property
+  minTotal: minTotal,
+  maxTotal: maxTotal,
+  html: `${formattedName} (${mass.toFixed(3)}kg × ${mult.toFixed(2)}) → ` +
+        `₵${minTotal.toFixed(2)}-₵${maxTotal.toFixed(2)}`
 };
-    
     
 
     // … your existing calls to updateFavoritesDisplay(), updateMultiplier(), etc. …
@@ -550,9 +550,36 @@ const entry = {
     updateCategoryStars();    // ← ensure this runs on page load
     sidebar.classList.toggle('collapsed', sidebarCollapsed);
 
-        document.getElementById('calc-output').innerHTML = entry.html;
-        document.getElementById('result').innerHTML = entry.html;
-        document.getElementById('result').style.display = 'block';
+// Format the numbers first
+const formattedMin = formatNumber(minTotal);
+const formattedMax = formatNumber(maxTotal);
+
+// Update displays
+document.getElementById('calc-output').innerHTML = `
+  <div class="calculation-result">
+    <div class="calculation-header">
+      ${formattedName}
+    </div>
+    <div class="calculation-numbers">
+      <span>${formattedMin}</span>
+      <span class="value-separator">-</span>
+      <span>${formattedMax}</span>
+    </div>
+  </div>
+`;
+
+document.getElementById('result').innerHTML = `
+  <div class="calculation-result">
+    <div class="calculation-numbers">
+      <span>${formattedMin}</span>
+      <span class="value-separator">-</span>
+      <span>${formattedMax}</span>
+    </div>
+  </div>
+`;
+
+// Keep visibility control
+document.getElementById('result').style.display = 'block';
         
         calculationHistory.unshift(entry);
         if (calculationHistory.length > 5) calculationHistory.pop();
