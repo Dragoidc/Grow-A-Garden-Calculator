@@ -434,8 +434,8 @@ var maxTotal = Math.pow(maxMass, 2) * basePrice * mult;
   var parts = [];
 
   // Variant badge
-  var btn = document.querySelector('.variant-buttons button.active');
-  var variant = btn ? btn.textContent : 'Normal';
+  const variantButton = document.querySelector('.variant-buttons button.active');
+const variant = variantButton ? variantButton.textContent : 'Normal';
   if (variant !== 'Normal') {
     var cls = (variant === 'Golden') ? 'golden-text' : 'rainbow-text';
     parts.push('<span class="' + cls + '">' + variant.toLowerCase() + '</span>');
