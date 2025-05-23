@@ -434,14 +434,15 @@ var maxTotal = Math.pow(maxMass, 2) * basePrice * mult;
   var parts = [];
 
   // Variant badge
-  var variantButton = document.querySelector('.variant-buttons button.active');
+var variantButton = document.querySelector('.variant-buttons button.active');
 var variant = variantButton ? variantButton.textContent : 'Normal';
-  if (variant !== 'Normal') {
-    var cls = (variant === 'Golden') ? 'golden-text' : 'rainbow-text';
-    parts.push('<span class="' + cls + '">' + variant.toLowerCase() + '</span>');
- }
+if (variant !== 'Normal') {
+  var cls = (variant === 'Golden') ? 'golden-text' : 'rainbow-text';
+  parts.push('<span class="' + cls + '">' + variant.toLowerCase() + '</span>');
+}
 
-var muts = Array.from(document.querySelectorAll('.mutation-chip.active'))
+// Fixed mutations list
+var muts = Array.from(document.querySelectorAll('.mutation-chip.active')) // ✅ Proper parenthesis
   .map(function(chip) {
     return chip.textContent.toLowerCase();
   });
