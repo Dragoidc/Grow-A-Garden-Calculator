@@ -438,7 +438,7 @@ var variantButton = document.querySelector('.variant-buttons button.active');
 var variant = variantButton ? variantButton.textContent : 'Normal';
 if (variant !== 'Normal') {
   var cls = (variant === 'Golden') ? 'golden-text' : 'rainbow-text';
-  parts.push('<span class="' + cls + '">' + variant.toLowerCase() + '</span>');
+  parts.push('<span class="' + cls + '">' + variant.toLowerCase + '</span>');
 }
 
 // Fixed mutations list
