@@ -703,7 +703,16 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
-
+    @media (max-width: 480px) {
+    .result-display {
+     font-size: 1.1em;
+     padding: 10px;
+    }
+  .min-value, .max-value {
+    font-size: 1.1em;
+    padding: 4px 8px;
+  }
+}
     .plant-search-container {
       position: relative;
       margin-bottom: 15px;
@@ -814,4 +823,95 @@
   0%   { transform: translateY(0)    scale(1);   }
   60%  { transform: translateY(-4px) scale(1.06); }
   100% { transform: translateY(-3px) scale(1.04); }
+}
+/* Add/Update these CSS rules */
+.calculation-result {
+  margin: 12px 0;
+  padding: 10px;
+  background: #387c63;
+  border-radius: 6px;
+  border: 1px solid #45a078;
+  font-size: 1em; /* Match base font size */
+}
+
+.calculation-header {
+  color: #fff;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.calculation-numbers {
+  font-size: 1em; /* Same as parent text */
+  color: #ffd700;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Number formatting styles */
+.result-range {
+  font-family: 'Courier New', monospace;
+  font-size: 1.4em;
+  color: #ffd700;
+  margin: 10px 0;
+}
+
+.value-separator {
+  color: #45a078;
+  margin: 0 8px;
+}
+
+.min-value { color: #a0e0ff; } /* Light blue */
+.max-value { color: #98fb98; } /* Light green */
+
+.crop-name-display {
+  font-size: 0.9em;
+  color: #ccc;
+  text-align: center;
+  margin-top: 6px;
+}
+/* Compact result styling */
+.result-display {
+  font-size: 1.2em;
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 6px;
+  background: #2e6b50;
+  border: 1px solid #45a078;
+  color: #fff;
+  max-width: 90%;
+  margin: 15px auto;
+}
+
+.highlight-amount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.value-range-separator {
+  color: #ffd700;
+  font-weight: 900;
+  padding: 0 5px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 3px;
+}
+
+.min-value, .max-value {
+  padding: 6px 12px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+  border: 1px solid #387c63;
+}
+
+.min-value { color: #a0e0ff; font-size: 1.3em; }
+.max-value { color: #98fb98; font-size: 1.3em; }
+
+.result-range span[data-infinite="true"] {
+  color: #ff4444;
+  font-size: 1.4em;
+  padding: 0 8px;
 }
