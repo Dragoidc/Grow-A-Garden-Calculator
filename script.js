@@ -434,12 +434,12 @@ var maxTotal = Math.pow(maxMass, 2) * basePrice * mult;
   var parts = [];
 
   // Variant badge
-  const variantButton = document.querySelector('.variant-buttons button.active');
-const variant = variantButton ? variantButton.textContent : 'Normal';
+  var variantButton = document.querySelector('.variant-buttons button.active');
+var variant = variantButton ? variantButton.textContent : 'Normal';
   if (variant !== 'Normal') {
     var cls = (variant === 'Golden') ? 'golden-text' : 'rainbow-text';
     parts.push('<span class="' + cls + '">' + variant.toLowerCase() + '</span>');
-  }
+ });
 
 var muts = Array.from(document.querySelectorAll('.mutation-chip.active'))
   .map(chip => chip.textContent.toLowerCase());  // Fixed "L" in toLowerCase
