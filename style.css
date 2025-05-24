@@ -914,26 +914,13 @@
   font-size: 1.4em;
   padding: 0 8px;
 }
-.plant-icon {
-  font-size: 1.8rem;
-  margin-right: 15px;
-  vertical-align: middle;
+
+.plant-image {
   animation: grow 0.5s ease-in-out;
-  /* Color variations */
-  &.fa-carrot { color: #ffa500; }
-  &.fa-leaf { color: #7cfc00; }
-  &.fa-seedling { color: #2e8b57; }
-  &.fa-watermelon { color: #ff6b6b; }
-  &.fa-skull { color: #4b0082; }
-  &.fa-moon { color: #add8e6; }
 }
 
 @keyframes grow {
   0% { transform: scale(0.8); }
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
-}
-
-.growing {
-  animation: grow 0.5s ease-in-out;
 }
