@@ -622,10 +622,13 @@ const formattedMax = formatNumber(maxTotal);
 // Updatedisplays:
 document.getElementById('calc-output').innerHTML = `
   <div class="calculation-result">
-    <i class="fas ${plantIcons[plant]} plant-icon growing"></i>
+    <img src="${cropImageMap[plant]}" 
+         class="plant-image" 
+         style="width: 50px; height: 50px; border-radius: 5px; margin-right: 10px;"
+         onerror="this.onerror=null;this.src='https://via.placeholder.com/50x50?text=❌';">
     <div class="calculation-header">
       ${formattedName}
-    </div>
+    </div
     <div class="calculation-numbers">
       <span>${formattedMin}</span>
       <span class="value-separator">-</span>
