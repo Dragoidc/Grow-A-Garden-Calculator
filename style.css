@@ -915,9 +915,17 @@
   padding: 0 8px;
 }
 .plant-icon {
-  font-size: 1.5rem;
-  margin-right: 10px;
+  font-size: 1.8rem;
+  margin-right: 15px;
   vertical-align: middle;
+  animation: grow 0.5s ease-in-out;
+  /* Color variations */
+  &.fa-carrot { color: #ffa500; }
+  &.fa-leaf { color: #7cfc00; }
+  &.fa-seedling { color: #2e8b57; }
+  &.fa-watermelon { color: #ff6b6b; }
+  &.fa-skull { color: #4b0082; }
+  &.fa-moon { color: #add8e6; }
 }
 
 @keyframes grow {
