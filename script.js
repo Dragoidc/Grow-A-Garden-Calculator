@@ -644,6 +644,3 @@ function updateCategoryStars() {
       sidebar.classList.toggle('collapsed', sidebarCollapsed);
       updateFavoritesDisplay();
     });
-function toggleTheme() {
-  document.body.classList.toggle('dark-theme');
-}
