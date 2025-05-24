@@ -25,10 +25,64 @@ const categories = {
 };
 
 const plantIcons = {
-  tomato: 'fa-seedling',
-  herb: 'fa-leaf',
-  flower: 'fa-spa',
-  vegetable: 'fa-carrot'
+  // Public Crops
+  "Carrot": "fa-carrot",
+  "Strawberry": "fa-strawberry",
+  "Blueberry": "fa-apple-whole", // No blueberry-specific icon
+  "Orange Tulip": "fa-sun",
+  "Tomato": "fa-seedling",
+  "Corn": "fa-wheat-awn",
+  "Daffodil": "fa-leaf",
+  "Watermelon": "fa-watermelon",
+  "Pumpkin": "fa-pumpkin",
+  "Apple": "fa-apple-whole",
+  "Bamboo": "fa-tree",
+  "Coconut": "fa-coconut",
+  "Cactus": "fa-cactus",
+  "Dragon Fruit": "fa-dragon",
+  "Mango": "fa-mango",
+  "Grape": "fa-wine-bottle",
+  "Mushroom": "fa-mushroom",
+  "Pepper": "fa-pepper-hot",
+  "Cacao": "fa-cookie",
+  "Beanstalk": "fa-seedling",
+
+  // Seed Pack
+  "Lemon": "fa-lemon",
+  "Pineapple": "fa-pineapple",
+  "Peach": "fa-peach",
+  "Raspberry": "fa-apple-whole",
+  "Pear": "fa-pear",
+  "Cranberry": "fa-apple-whole",
+  "Durian": "fa-cloud-meatball",
+  "Eggplant": "fa-eggplant",
+  "Venus Flytrap": "fa-bug",
+  "Lotus": "fa-spa",
+
+  // Exotic Seed Pack
+  "Papaya": "fa-pagelines",
+  "Banana": "fa-banana",
+  "Passionfruit": "fa-apple-whole",
+  "Soul Fruit": "fa-ghost",
+  "Cursed Fruit": "fa-skull",
+
+  // Easter Event
+  "Chocolate Carrot": "fa-carrot",
+  "Candy Sunflower": "fa-sun",
+  "Easter Egg": "fa-egg",
+  "Red Lollipop": "fa-candy-cane",
+  "Candy Blossom": "fa-candy-cane",
+
+  // Lunar Glow Event
+  "Nightshade": "fa-moon",
+  "Glowshroom": "fa-mushroom",
+  "Mint": "fa-leaf",
+  "Moonflower": "fa-moon",
+  "Starfruit": "fa-star",
+  "Moonglow": "fa-moon",
+  "Moon Blossom": "fa-spa",
+  "Blood Banana": "fa-banana",
+  "Moon Melon": "fa-watermelon"
 };
 
       const basePrices = {
@@ -565,9 +619,10 @@ const entry = {
 const formattedMin = formatNumber(minTotal);
 const formattedMax = formatNumber(maxTotal);
 
-// Update displays
+// Updatedisplays:
 document.getElementById('calc-output').innerHTML = `
   <div class="calculation-result">
+    <i class="fas ${plantIcons[plant]} plant-icon growing"></i>
     <div class="calculation-header">
       ${formattedName}
     </div>
@@ -581,6 +636,7 @@ document.getElementById('calc-output').innerHTML = `
 
 document.getElementById('result').innerHTML = `
   <div class="calculation-result">
+    <i class="fas ${plantIcons[plant]} plant-icon growing"></i>
     <div class="calculation-numbers">
       <span>${formattedMin}</span>
       <span class="value-separator">-</span>
