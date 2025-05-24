@@ -24,7 +24,12 @@ const categories = {
   ]
 };
 
-
+const plantIcons = {
+  tomato: 'fa-seedling',
+  herb: 'fa-leaf',
+  flower: 'fa-spa',
+  vegetable: 'fa-carrot'
+};
 
       const basePrices = {
         "Carrot": 270,
