@@ -620,8 +620,7 @@ const formattedMax = formatNumber(maxTotal);
 
 // Updatedisplays:
 document.getElementById('calc-output').innerHTML = `
-  <div class="calculation-result">
-    <img src="${cropImageMap[plant]}" 
+  <div class="calculation-result"> 
          class="plant-image" 
          style="width: 50px; height: 50px; border-radius: 5px; margin-right: 10px;"
          onerror="this.onerror=null;this.src='https://via.placeholder.com/50x50?text=❌';">
