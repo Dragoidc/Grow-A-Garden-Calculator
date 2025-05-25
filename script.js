@@ -589,9 +589,9 @@ parts.push(
           case 'Venus Flytrap': color = '#90EE90'; break;
           case 'Lotus': color = '#FFE4E1'; break;
         }
-        formattedParts.push(`<span style="color:${color}; font-weight:bold;">${plant.toLowerCase()}</span>`);
-        
-        const formattedName = formattedParts.join(' ');
+       formattedParts.push(`<span class="plant-name">${plant}</span>`); // Remove .toLowerCase()
+
+const formattedName = formattedParts.join(' ');
 
      // Remove duplicate price declaration
 const priceRange = `${minTotal.toFixed(2)}-${maxTotal.toFixed(2)}`;
@@ -620,17 +620,21 @@ const formattedMax = formatNumber(maxTotal);
 
 // Updatedisplays:
 document.getElementById('calc-output').innerHTML = `
-  <div class="calculation-result"> 
+  <div class="calculation-result">
+    <img src="${cropImageMap[plant]}" 
          class="plant-image" 
          style="width: 50px; height: 50px; border-radius: 5px; margin-right: 10px;"
+         alt="${plant}"
          onerror="this.onerror=null;this.src='https://via.placeholder.com/50x50?text=❌';">
-    <div class="calculation-header">
-      ${formattedName}
-    </div
-    <div class="calculation-numbers">
-      <span>${formattedMin}</span>
-      <span class="value-separator">-</span>
-      <span>${formattedMax}</span>
+    <div class="text-content">
+      <div class="calculation-header">
+        ${formattedName}
+      </div>
+      <div class="calculation-numbers">
+        <span>${formattedMin}</span>
+        <span class="value-separator">-</span>
+        <span>${formattedMax}</span>
+      </div>
     </div>
   </div>
 `;
