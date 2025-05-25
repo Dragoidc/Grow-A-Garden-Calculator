@@ -933,28 +933,20 @@
   display: flex;
   align-items: center;
   gap: 15px;
+  flex-shrink: 0;
 }
 
 .text-content {
   flex: 1;
 }
-
-.plant-image {
-  flex-shrink: 0;
-  object-fit: contain;
-}
 .plant-name {
   color: #4CAF50;
-  font-weight: bold;
+  font-weight: 600; /* 600 = semi-bold, bold=700 */
   font-size: 1.2em;
-}
-.plant-name {
-  color: #4CAF50;
-  font-weight: 600;
   text-transform: capitalize;
 }
 
 .mutation-text {
   font-style: italic;
-  color: #9C27B0;
+  color: #9C27B0; /* Purple for mutations */
 }
