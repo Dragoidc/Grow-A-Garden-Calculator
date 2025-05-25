@@ -929,3 +929,22 @@
   vertical-align: middle;
   object-fit: contain;
 }
+.calculation-result {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.text-content {
+  flex: 1;
+}
+
+.plant-image {
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.plant-name {
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 1.2em;
+}
