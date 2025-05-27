@@ -502,18 +502,27 @@
       border-radius: 6px;
     }
     
-    .golden-text {
-      color: #ffd700;
-      font-weight: bold;
-    }
+   .golden-text {
+     color: #ffd700;
+     text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+   }
     
     .rainbow-text {
-      background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      font-weight: bold;
-    }
+  background: linear-gradient(90deg, 
+    #ff0000, #ff8000, #ffff00, 
+    #00ff00, #00ffff, #0000ff, 
+    #8000ff, #ff0080);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow-glow 2s ease-in-out infinite;
+}
+
+@keyframes rainbow-glow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
     
     .shocked-text {
       color: #ffcc00;
