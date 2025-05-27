@@ -443,12 +443,17 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
         }
       }
 
-      window.hidePanel = function() {
-        document.getElementById('panel').classList.remove('active');
-        document.querySelectorAll('#sidebar button').forEach(b => b.classList.remove('active'));
-        document.getElementById('result').textContent = '';
-        document.getElementById('result').style.display = 'none';
-      };
+     window.hidePanel = function() {
+  document.getElementById('panel').classList.remove('active');
+  document.querySelectorAll('#sidebar button').forEach(b => b.classList.remove('active'));
+  document.getElementById('result').textContent = '';
+  document.getElementById('result').style.display = 'none';
+  
+  // Close mobile sidebar
+  if (window.innerWidth < 768) {
+    document.getElementById('sidebar').classList.remove('active');
+  }
+};
 
       window.showCropReference = function() {
         const panel = document.getElementById('crop-reference');
@@ -716,3 +721,7 @@ function updateCategoryStars() {
       sidebar.classList.toggle('collapsed', sidebarCollapsed);
       updateFavoritesDisplay();
     });
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('active');
+}
