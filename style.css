@@ -915,19 +915,18 @@
 
 .result-range span[data-infinite="true"] {
   color: #ff4444;
-  font-size: 1.4em;
+  font-size: 1.2em;
   padding: 0 8px;
 }
 
 .plant-image {
   animation: grow 0.5s ease-in-out;
-  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  margin-right: 15px;
   object-fit: contain;
-  margin-right: 10px;
-  vertical-align: middle;
-  width: 50px; /* Add this for consistency */
-  height: 50px; /* Add this for consistency */
-  border-radius: 5px; /* From your inline style */
+  flex-shrink: 0;
 }
 
 @keyframes grow {
@@ -936,28 +935,24 @@
   100% { transform: scale(1); }
 }
 
-.calculation-result {
+.calculation-header {
   display: flex;
+  flex-direction: row-reverse; /* Reverse order */
+  justify-content: flex-start;
   align-items: center;
-  gap: 15px;
-  /* Remove flex-shrink: 0 here */
-  padding: 10px; /* Recommended for spacing */
-  background: rgba(255,255,255,0.1); /* Optional for contrast */
-  border-radius: 8px; /* Optional */
+  gap: 8px;
+  flex-wrap: wrap;
 }
-
 .text-content {
   flex: 1;
 }
 
 .plant-name {
-  order: 2;
-  margin-left: 8px;
   font-weight: 600;
-  font-size: .5em;
-  text-transform: capitalize;
-  display: block; /* Ensure proper spacing */
-  margin-bottom: 4px; /* Space between name and numbers */
+  font-size: 1em;
+  color: inherit; /* Keep your JS color */
+  order: 2; /* Comes after mutations */
+  margin-left: 8px;
 }
 
 .mutation-text {
@@ -965,4 +960,5 @@
   font-style: italic;
   color: #9C27B0;
   font-size: 0.9em; /* Slightly smaller than plant name */
+  white-space: nowrap;
 }
