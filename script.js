@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+ document.addEventListener('DOMContentLoaded', () => {
 const categories = {
   "Public Crops": [
     "Carrot","Strawberry","Blueberry","Orange Tulip","Tomato",
@@ -639,7 +639,6 @@ document.getElementById('calc-output').innerHTML = `
   </div>
 `;
 
-
 document.getElementById('result').innerHTML = `
   <div class="calculation-result">
     <img src="${cropImageMap[plant]}" 
@@ -717,4 +716,3 @@ function updateCategoryStars() {
       sidebar.classList.toggle('collapsed', sidebarCollapsed);
       updateFavoritesDisplay();
     });
-    
