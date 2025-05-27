@@ -834,6 +834,10 @@
 }
 
 .calculation-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: baseline;
   color: #fff;
   margin-bottom: 8px;
   font-weight: bold;
@@ -947,14 +951,17 @@
 }
 
 .plant-name {
+  order: 2;
+  margin-left: 8px;
   font-weight: 600;
-  font-size: 1.0em;
+  font-size: .5em;
   text-transform: capitalize;
   display: block; /* Ensure proper spacing */
   margin-bottom: 4px; /* Space between name and numbers */
 }
 
 .mutation-text {
+  order: 1;
   font-style: italic;
   color: #9C27B0;
   font-size: 0.9em; /* Slightly smaller than plant name */
