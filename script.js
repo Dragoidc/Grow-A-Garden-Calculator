@@ -534,7 +534,7 @@ parts.push(
       // FIX #2: Corrected return statement
       return `<span class="${mutClass}">${mutationName.toLowerCase()}</span>`;
     });
-  formattedParts = formattedParts.concat(coloredMutationSpans);
+   formattedParts = formattedParts.concat(coloredMutationSpans);
 }
         
         let color = '';
@@ -589,7 +589,7 @@ parts.push(
           case 'Venus Flytrap': color = '#90EE90'; break;
           case 'Lotus': color = '#FFE4E1'; break;
         }
-      formattedParts.push(`<span class="plant-name" style="color:${color}">${plant}</span>`);
+    formattedParts.push(`<span class="plant-name" style="color:${color}">${plant}</span>`);
 
 const formattedName = formattedParts.join(' ');
 
