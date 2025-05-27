@@ -1016,18 +1016,23 @@
   }
 
   .view-crops-btn {
+    display: block !important; /* Show the button */
     left: 50%;
     transform: translateX(-50%);
     bottom: 10px;
     width: 90%;
     text-align: center;
   }
+}
 
   .plant-panel input,
   .plant-panel select {
     font-size: 16px;
   }
-
+ .crop-reference-panel {
+    bottom: 0 !important; /* Full height on mobile */
+    z-index: 1000; /* Ensure it appears above menu */
+  }
   .history-controls {
     flex-direction: column;
   }
