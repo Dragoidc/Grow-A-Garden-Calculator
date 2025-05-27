@@ -917,6 +917,13 @@
 
 .plant-image {
   animation: grow 0.5s ease-in-out;
+  flex-shrink: 0;
+  object-fit: contain;
+  margin-right: 10px;
+  vertical-align: middle;
+  width: 50px; /* Add this for consistency */
+  height: 50px; /* Add this for consistency */
+  border-radius: 5px; /* From your inline style */
 }
 
 @keyframes grow {
@@ -924,29 +931,31 @@
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
-.plant-image {
-  margin-right: 10px;
-  vertical-align: middle;
-  object-fit: contain;
-}
+
 .calculation-result {
   display: flex;
   align-items: center;
   gap: 15px;
-  flex-shrink: 0;
+  /* Remove flex-shrink: 0 here */
+  padding: 10px; /* Recommended for spacing */
+  background: rgba(255,255,255,0.1); /* Optional for contrast */
+  border-radius: 8px; /* Optional */
 }
 
 .text-content {
   flex: 1;
 }
+
 .plant-name {
-  color: #4CAF50;
-  font-weight: 600; /* 600 = semi-bold, bold=700 */
+  font-weight: 600;
   font-size: 1.2em;
   text-transform: capitalize;
+  display: block; /* Ensure proper spacing */
+  margin-bottom: 4px; /* Space between name and numbers */
 }
 
 .mutation-text {
   font-style: italic;
-  color: #9C27B0; /* Purple for mutations */
+  color: #9C27B0;
+  font-size: 0.9em; /* Slightly smaller than plant name */
 }
