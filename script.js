@@ -492,11 +492,11 @@ var maxTotal = Math.pow(maxMass, 2) * basePrice * mult;
   var parts = [];
 
   // Variant badge
-var variantButton = document.querySelector('.variant-buttons button.active');
-var variant = variantButton ? variantButton.textContent : 'Normal';
-if (variant !== 'Normal') {
-  var cls = (variant === 'Golden') ? 'golden-text' : 'rainbow-text';
-  parts.push('<span class="' + cls + '">' + variant.toLowerCase + '</span>');
+const variantButton = document.querySelector('.variant-buttons button.active');
+if (variantButton && variantButton.textContent !== 'Normal') {
+  const variant = variantButton.textContent.trim();
+  const variantClass = variant === 'Golden' ? 'golden-text' : 'rainbow-text';
+  formattedParts.push(`<span class="${variantClass}">${variant.toLowerCase()}</span>`);
 }
 
 // Fixed mutations list
