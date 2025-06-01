@@ -728,25 +728,34 @@ document.getElementById('result').style.display = 'block';
         updateHistoryDisplay();
       };
 
-      window.validateMass = function() {
-        const massInput = document.getElementById('mass');
-        const errorDisplay = document.getElementById('massError');
-        const value = parseFloat(massInput.value);
+     window.validateMass = function() {
+  const massInput = document.getElementById('mass');
+  const errorDisplay = document.getElementById('massError');
+  const rawValue = massInput.value.trim();
+  
+  const parsed = parseFloat(rawValue);
 
-        if (value < 0.01) {
-          errorDisplay.textContent = "Mass cannot be less than 0.01 kg";
-          errorDisplay.style.display = 'block';
-          return false;
-        }
-        if (value > 9999) {
-          errorDisplay.textContent = "Mass cannot exceed 9999 kg";
-          errorDisplay.style.display = 'block';
-          return false;
-        }
-        
-        errorDisplay.style.display = 'none';
-        return true;
-      };
+  if (rawValue === '' || isNaN(parsed)) {
+    errorDisplay.textContent = "Please enter a valid number (0.01–9999).";
+    errorDisplay.style.display = 'block';
+    return false;
+  }
+
+  if (parsed < 0.01) {
+    errorDisplay.textContent = "Mass cannot be less than 0.01 kg.";
+    errorDisplay.style.display = 'block';
+    return false;
+  }
+
+  if (parsed > 9999) {
+    errorDisplay.textContent = "Mass cannot exceed 9999 kg.";
+    errorDisplay.style.display = 'block';
+    return false;
+  }
+
+  errorDisplay.style.display = 'none';
+  return true;
+};
 // Call this any time `favorites` changes
 function updateCategoryStars() {
   document.querySelectorAll('.category-section button').forEach(btn => {
