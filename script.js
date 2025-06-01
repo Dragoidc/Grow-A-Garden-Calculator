@@ -640,7 +640,16 @@ parts.push(
           case 'Durian': color = '#A9A900'; break;
           case 'Venus Flytrap': color = '#90EE90'; break;
           case 'Lotus': color = '#FFE4E1'; break;
-        }
+          case 'Sunflower': color = '#FFD700'; break;
+          case 'Nectarine': color = '#FFB347'; break; 
+          case 'Hive Fruit': color = '#DAA520'; break;
+          case 'Purple Dahlia': color = '#800080'; break; 
+          case 'Pink Lily': color = '#FF69B4'; break; 
+          case 'Foxglove': color = '#DA70D6'; break;
+          case 'Lilac': color = '#C8A2C8'; break; 
+          case 'Rose': color = '#FF007F'; break; 
+          case 'Celestiberry': color = '#FAFAD2'; break;
+          case 'Moon Mango': color = '#FFEFD5'; break; 
     formattedParts.push(`<span class="plant-name" style="color:${color}">${plant}</span>`);
 
 const formattedName = formattedParts.join(' ');
