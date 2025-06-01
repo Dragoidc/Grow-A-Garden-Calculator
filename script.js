@@ -76,7 +76,16 @@ const categories = {
           "Moon Blossom": "https://static.wikia.nocookie.net/growagarden/images/a/af/MoonBlossomFruit.png/revision/latest?cb=20250511173731",
           "Beanstalk": "https://static.wikia.nocookie.net/growagarden/images/f/f9/BeanstalkIcon.png/revision/latest/scale-to-width-down/1000?cb=20250517153727",
           "Blood Banana": "https://static.wikia.nocookie.net/growagarden/images/8/83/Blood_Banana_Icon.png/revision/latest?cb=20250517140315",
-          "Moon Melon": "https://static.wikia.nocookie.net/growagarden/images/4/4f/Moon_Melon_Icon.png/revision/latest?cb=20250517140316"
+          "Moon Melon": "https://static.wikia.nocookie.net/growagarden/images/4/4f/Moon_Melon_Icon.png/revision/latest?cb=20250517140316",
+          "Sunflower": "https://static.wikia.nocookie.net/growagarden/images/c/c0/Sunflower_Produce_.png/revision/latest?cb=20250531190322",
+          "Nectarine": "https://static.wikia.nocookie.net/growagarden/images/3/3a/Nectarine.png/revision/latest?cb=20250531152812",
+          "Hive Fruit": "https://static.wikia.nocookie.net/growagarden/images/0/0f/HiveFruitCropIcon.png/revision/latest/scale-to-width-down/1000?cb=20250531150508",
+          "Pink Lily": "https://static.wikia.nocookie.net/growagarden/images/0/03/Pink_Lily.png/revision/latest?cb=20250531165949",
+          "Foxglove": "https://static.wikia.nocookie.net/growagarden/images/e/e7/Foxgloveproduce.png/revision/latest?cb=20250531162211",
+          "Lilac": "https://static.wikia.nocookie.net/growagarden/images/d/d2/LilacCropIcon.png/revision/latest/scale-to-width-down/1000?cb=20250531164609",
+          "Rose": "https://static.wikia.nocookie.net/growagarden/images/d/d3/Roseflower.png/revision/latest?cb=20250531145536",
+          "Celestiberry": "https://static.wikia.nocookie.net/growagarden/images/3/33/CelestiberryIcon.png/revision/latest/scale-to-width-down/1000?cb=20250525112629",
+          "Moon Mango": "https://static.wikia.nocookie.net/growagarden/images/f/fd/MoonMangoIcon.png/revision/latest/scale-to-width-down/1000?cb=20250525113246"
         };
 const plantIcons = {
   // Public Crops
@@ -137,18 +146,6 @@ const plantIcons = {
   "Moon Blossom": "fa-spa",
   "Blood Banana": "fa-banana",
   "Moon Melon": "fa-watermelon"
-  "Celestiberry": "fa-star",
-  "Moon Mango": "fa-moon"
-
-  // Bizzy Bees Event
-  "Sunflower": "fa-sun",
-  "Nectarine": "fa-peach",
-  "Hive Fruit": "fa-apple-whole",
-  "Purple Dahlia": "fa-spa",
-  "Pink Lily": "fa-spa",
-  "Foxglove": "fa-leaf",
-  "Lilac": "fa-leaf",
-  "Rose": "fa-spa",
 };
 
       const basePrices = {
