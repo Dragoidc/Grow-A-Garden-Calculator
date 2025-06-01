@@ -181,6 +181,16 @@ const plantIcons = {
         "Beanstalk": 200,
         "Blood Banana": 4198,
         "Moon Melon": 711
+       "Rose": 100,
+       "Sunflower": 100,
+       "Nectarine": 100,
+       "Hive Fruit": 100,
+       "Purple Dahlia": 100,
+       "Pink Lily": 100,
+       "Foxglove": 100,
+       "Lilac": 100,
+       "Celestiberry": 15000,
+       "Moon Mango": 100000
       };
       // Number formatting function
 function formatNumber(value) {
@@ -245,6 +255,16 @@ cropInfo["Moonglow"]         = "Dropped from Night Seed Pack (7.8% chance); Prem
 cropInfo["Moon Blossom"]     = "Dropped from Night Seed Pack (1.63% chance); Premium Night Seed Pack (2.5% chance)";
 cropInfo["Blood Banana"]     = "Buyable from Blood Moon Shop for 200,000₵ when in stock";
 cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when in stock";
+cropInfo["Sunflower"]    = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Nectarine"]    = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Hive Fruit"]   = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Purple Dahlia"]= "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Pink Lily"]    = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Foxglove"]     = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Lilac"]        = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Rose"]         = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Celestiberry"] = "Buyable from Twilight Shop for 15,000,000₵ (Night event)";
+cropInfo["Moon Mango"]   = "Buyable from Twilight Shop for 1,000,000,000₵ (Night event)";
 
 
       });
@@ -398,7 +418,12 @@ cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when
         { name: "Bloodlit", value: 3 },
         { name: "Zombified", value: 24 },
         { name: "Celestial", value: 119 },
-        { name: "Disco", value: 124 }
+        { name: "Disco", value: 124 },
+        { name: "Twisted", value: 29 },        
+        { name: "Pollinated", value: 2 },    
+        { name: "HoneyGlazed", value: 4 },  
+        { name: "Void Touched", value: 134 },
+        { name: "Plasma", value: 4 }        
       ];
 
       let variantMultiplier = 1;
@@ -553,7 +578,11 @@ parts.push(
       else if (mutationName === 'Zombified') mutClass = 'zombified-text';
       else if (mutationName === 'Celestial') mutClass = 'celestial-text';
       else if (mutationName === 'Disco') mutClass = 'disco-text';
-      
+      else if (mutationName === 'Twisted')    mutClass = 'twisted-text';
+      else if (mutationName === 'Pollinated') mutClass = 'pollinated-text';
+      else if (mutationName === 'HoneyGlazed') mutClass = 'honeyglazed-text';
+      else if (mutationName === 'Void Touched') mutClass = 'voidtouched-text';
+      else if (mutationName === 'Plasma')     mutClass = 'plasma-text';
       // FIX #2: Corrected return statement
       return `<span class="${mutClass}">${mutationName.toLowerCase()}</span>`;
     });
