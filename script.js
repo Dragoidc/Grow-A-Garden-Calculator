@@ -650,6 +650,7 @@ parts.push(
           case 'Rose': color = '#FF007F'; break; 
           case 'Celestiberry': color = '#FAFAD2'; break;
           case 'Moon Mango': color = '#FFEFD5'; break; 
+        }
     formattedParts.push(`<span class="plant-name" style="color:${color}">${plant}</span>`);
 
 const formattedName = formattedParts.join(' ');
