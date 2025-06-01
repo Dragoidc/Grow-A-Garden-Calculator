@@ -180,17 +180,17 @@ const plantIcons = {
         "Mint": 5250,
         "Beanstalk": 200,
         "Blood Banana": 4198,
-        "Moon Melon": 711
-       "Rose": 100,
-       "Sunflower": 100,
-       "Nectarine": 100,
-       "Hive Fruit": 100,
-       "Purple Dahlia": 100,
-       "Pink Lily": 100,
-       "Foxglove": 100,
-       "Lilac": 100,
-       "Celestiberry": 15000,
-       "Moon Mango": 100000
+        "Moon Melon": 711,
+        "Rose": 100,
+        "Sunflower": 100,
+        "Nectarine": 100,
+        "Hive Fruit": 100,
+        "Purple Dahlia": 100,
+        "Pink Lily": 100,
+        "Foxglove": 100,
+        "Lilac": 100,
+        "Celestiberry": 15000,
+        "Moon Mango": 100000
       };
       // Number formatting function
 function formatNumber(value) {
