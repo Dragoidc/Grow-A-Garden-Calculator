@@ -590,7 +590,31 @@
       75% { color: green; }
       100% { color: red; }
     }
-
+.twisted-text {
+  color: #00ff80;           
+  font-weight: bold;
+  text-shadow: 0 0 4px #008060;
+}
+.pollinated-text {
+  color: #ffff99;             
+  font-weight: bold;
+  text-shadow: 0 0 4px #ffff33;
+}
+.honeyglazed-text {
+  color: #ffb84d;            
+  font-weight: bold;
+  text-shadow: 0 0 4px #ff8000;
+}
+.voidtouched-text {
+  color: #8a2be2;            
+  font-weight: bold;
+  text-shadow: 0 0 5px #4b0082;
+}
+.plasma-text {
+  color: #ff00ff;             
+  font-weight: bold;
+  text-shadow: 0 0 5px #ff69b4;
+}
     ::-webkit-scrollbar {
       width: 10px;
       height: 10px;
