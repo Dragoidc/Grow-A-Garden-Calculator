@@ -17,10 +17,14 @@ const categories = {
     "Chocolate Carrot","Candy Sunflower","Easter Egg",
     "Red Lollipop","Candy Blossom"
   ],
-  "Lunar Glow Event": [
-    "Nightshade","Glowshroom","Mint","Moonflower",
-    "Starfruit","Moonglow","Moon Blossom","Blood Banana",
-    "Moon Melon"
+   "Lunar Glow Event": [
+    "Nightshade", "Glowshroom", "Mint", "Moonflower", 
+    "Starfruit", "Moonglow", "Moon Blossom", "Blood Banana", 
+    "Moon Melon", "Celestiberry", "Moon Mango"
+  ],
+  "Bizzy Bees Event": [
+    "Sunflower", "Nectarine", "Hive Fruit", 
+    "Purple Dahlia", "Pink Lily", "Foxglove", "Lilac", "Rose"
   ]
 };
         const cropImageMap = {
@@ -133,6 +137,18 @@ const plantIcons = {
   "Moon Blossom": "fa-spa",
   "Blood Banana": "fa-banana",
   "Moon Melon": "fa-watermelon"
+  "Celestiberry": "fa-star",
+  "Moon Mango": "fa-moon"
+
+  // Bizzy Bees Event
+  "Sunflower": "fa-sun",
+  "Nectarine": "fa-peach",
+  "Hive Fruit": "fa-apple-whole",
+  "Purple Dahlia": "fa-spa",
+  "Pink Lily": "fa-spa",
+  "Foxglove": "fa-leaf",
+  "Lilac": "fa-leaf",
+  "Rose": "fa-spa",
 };
 
       const basePrices = {
