@@ -255,16 +255,16 @@ cropInfo["Moonglow"]         = "Dropped from Night Seed Pack (7.8% chance); Prem
 cropInfo["Moon Blossom"]     = "Dropped from Night Seed Pack (1.63% chance); Premium Night Seed Pack (2.5% chance)";
 cropInfo["Blood Banana"]     = "Buyable from Blood Moon Shop for 200,000₵ when in stock";
 cropInfo["Moon Melon"]       = "Buyable from Blood Moon Shop for 500,000₵ when in stock";
-cropInfo["Sunflower"]    = "Exclusive to Bizzy Bees event (2025)";
-cropInfo["Nectarine"]    = "Exclusive to Bizzy Bees event (2025)";
-cropInfo["Hive Fruit"]   = "Exclusive to Bizzy Bees event (2025)";
-cropInfo["Purple Dahlia"]= "Exclusive to Bizzy Bees event (2025)";
-cropInfo["Pink Lily"]    = "Exclusive to Bizzy Bees event (2025)";
-cropInfo["Foxglove"]     = "Exclusive to Bizzy Bees event (2025)";
-cropInfo["Lilac"]        = "Exclusive to Bizzy Bees event (2025)";
-cropInfo["Rose"]         = "Exclusive to Bizzy Bees event (2025)";
-cropInfo["Celestiberry"] = "Buyable from Twilight Shop for 15,000,000₵ (Night event)";
-cropInfo["Moon Mango"]   = "Buyable from Twilight Shop for 1,000,000,000₵ (Night event)";
+cropInfo["Sunflower"]        = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Nectarine"]        = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Hive Fruit"]       = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Purple Dahlia"]    = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Pink Lily"]        = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Foxglove"]         = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Lilac"]            = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Rose"]             = "Exclusive to Bizzy Bees event (2025)";
+cropInfo["Celestiberry"]     = "Buyable from Twilight Shop for 15,000,000₵ (Night event)";
+cropInfo["Moon Mango"]       = "Buyable from Twilight Shop for 1,000,000,000₵ (Night event)";
 
 
       });
