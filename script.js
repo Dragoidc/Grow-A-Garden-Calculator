@@ -514,11 +514,11 @@ cropInfo["Moon Mango"]       = "Buyable from Twilight Shop for 1,000,000,000₵ 
       };
 
  window.calculate = function() {
+    if (!validateMass()) return;
     console.log('--- CALCULATION STARTED ---');
     console.log('Plant:', document.getElementById('plant-select').value);
     console.log('Mass:', document.getElementById('mass').value);
     console.log('Multiplier:', document.getElementById('multiplier').value);
-  if (!validateMass()) return;
   // 1. Inputs
   var plant = document.getElementById('plant-select').value;
   var mass  = parseFloat(document.getElementById('mass').value);
