@@ -1,4 +1,20 @@
      document.addEventListener('DOMContentLoaded', () => {
+function populateCropDropdown() {
+  const cropSelect = document.getElementById('reverseCropSelect');
+  if (!cropSelect) return;
+
+  // Build <optgroup> sections for each category
+  let optionsHTML = '<option value="" disabled selected>-- Select a crop --</option>';
+  Object.entries(categories).forEach(([categoryName, cropList]) => {
+    optionsHTML += `<optgroup label="${categoryName}">` +
+                     cropList.map(cropName => 
+                       `<option value="${cropName}">${cropName}</option>`
+                     ).join('') +
+                   `</optgroup>`;
+  });
+
+  cropSelect.innerHTML = optionsHTML;
+}
 const categories = {
   "Public Crops": [
     "Carrot","Strawberry","Blueberry","Orange Tulip","Tomato",
