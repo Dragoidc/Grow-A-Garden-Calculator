@@ -1,4 +1,4 @@
-    * {
+        * {
       box-sizing: border-box;
     }
     body { 
@@ -997,6 +997,186 @@
   color: #9C27B0;
   white-space: nowrap;
   font-size: 0.95em;
+}
+/* 1) Floating Reverse‐Lookup & Trivia Buttons ───────────────────── */
+.reverse-lookup-btn,
+.trivia-btn {
+  background: #45a078 !important;
+  position: fixed;
+  left: 20px;
+  z-index: 15;
+  padding: 12px 20px !important;
+  border-radius: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+.reverse-lookup-btn { bottom: 70px; }
+.trivia-btn { bottom: 120px; }
+
+/* 2) Filter Controls in Sidebar ────────────────────────────────── */
+.filter-controls label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.filter-controls select,
+.filter-controls input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  border: none;
+  background: #387c63;
+  color: #fff;
+  font-size: 0.9em;
+}
+
+/* 4) Reverse Lookup Panel ──────────────────────────────────────── */
+.reverse-lookup-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #2e6b50;
+  padding: 20px 15px;
+  overflow-y: auto;
+  z-index: 20;
+  display: none;
+}
+.reverse-lookup-panel.active { display: block; }
+.reverse-lookup-panel h2 {
+  color: #fff;
+  margin: 0 0 20px 0;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #45a078;
+  font-size: 1.4em;
+}
+.reverse-lookup-panel .back-btn {
+  background: #45a078;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 20px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1em;
+  transition: all 0.2s;
+}
+.reverse-lookup-panel .back-btn:hover {
+  background: #387c63;
+  transform: translateX(-3px);
+}
+.reverse-lookup-panel label {
+  font-weight: bold;
+  display: block;
+  margin: 10px 0 5px;
+}
+.reverse-lookup-panel input,
+.reverse-lookup-panel select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: #555;
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+}
+.reverse-lookup-panel button#findCombosBtn {
+  width: 100%;
+  padding: 12px;
+  background: #28a745;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 10px 0;
+}
+.reverse-lookup-panel button#findCombosBtn:hover {
+  background: #218838;
+}
+.reverse-lookup-panel #reverseResults ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+.reverse-lookup-panel #reverseResults li {
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 4px;
+  color: #fff;
+}
+
+/* 5) Trivia Panel ──────────────────────────────────────────────── */
+.trivia-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #2e6b50;
+  padding: 20px 15px;
+  overflow-y: auto;
+  z-index: 20;
+  display: none;
+}
+.trivia-panel.active { display: block; }
+.trivia-panel h2 {
+  color: #fff;
+  margin: 0 0 20px 0;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #45a078;
+  font-size: 1.4em;
+}
+.trivia-panel .back-btn {
+  background: #45a078;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 20px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1em;
+  transition: all 0.2s;
+}
+.trivia-panel .back-btn:hover {
+  background: #387c63;
+  transform: translateX(-3px);
+}
+.quiz-option-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background: #387c63;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+}
+.quiz-option-btn:hover {
+  background: #45a078;
+}
+
+/* 6) Pinch‐to‐Zoom for #result ─────────────────────────────────── */
+#result {
+  transform-origin: top left;
 }
 /* ======= MOBILE STYLES ======= */
 @media (max-width: 767px) {
