@@ -710,22 +710,6 @@ document.getElementById('result').style.display = 'block';
         
         updateHistoryDisplay();
       };
-window.showReverseLookup = function() {
-  hidePanel();
-  hideCropReference();
-  document.getElementById('reversePanel').classList.add('active');
-
-  const cropSelect = document.getElementById('reverseCropSelect');
-  if (cropSelect && cropSelect.options.length === 0) {
-    let optionsHTML = '<option value="any">Any</option>';
-    for (const [cat, crops] of Object.entries(categories)) {
-      optionsHTML += `<optgroup label="${cat}">` +
-        crops.map(c => `<option value="${c}">${c}</option>`).join('') +
-        '</optgroup>';
-    }
-    cropSelect.innerHTML = optionsHTML;
-  }
-};
 
 window.hideReverseLookup = function() {
   document.getElementById('reversePanel').classList.remove('active');
