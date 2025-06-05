@@ -99,43 +99,40 @@
       </div>
     </div>
 
-    <!-- ─── Reverse Lookup Panel ─── -->
-    <div class="reverse-lookup-panel" id="reversePanel">
-      <button class="back-btn" onclick="hideReverseLookup()">← Back</button>
-      <h2>Reverse Price Lookup</h2>
+<div class="reverse-lookup-panel" id="reversePanel">
+  <button class="back-btn" onclick="hideReverseLookup()">← Back</button>
+  <h2>Reverse Price Lookup</h2>
 
-      <label for="targetPrice">Target Price:</label>
-      <input
-        type="number"
-        id="targetPrice"
-        placeholder="Enter target price"
-        min="1"
-      />
+  <label for="targetPrice">Target Price:</label>
+  <input type="number" id="targetPrice" placeholder="Enter target price" min="1" />
 
-    <label for="reverseCropSelect">Crop:</label>
-    <select id="reverseCropSelect">
-      <option value="" disabled selected>-- Select a crop --</option>
+  <label for="reverseCropSelect">Crop:</label>
+  <select id="reverseCropSelect">
+    <option value="" disabled selected>-- Select a crop --</option>
   </select>
 
-      <label for="reverseVariantSelect">Variant:</label>
-      <select id="reverseVariantSelect">
-        <option value="any">Any</option>
-        <option value="Normal">Normal</option>
-        <option value="Golden">Golden</option>
-        <option value="Rainbow">Rainbow</option>
-      </select>
+  <label for="reverseVariantSelect">Variant:</label>
+  <select id="reverseVariantSelect">
+    <option value="any">Any</option>
+    <option value="Normal">Normal</option>
+    <option value="Golden">Golden</option>
+    <option value="Rainbow">Rainbow</option>
+  </select>
 
-      <label for="envLimit">Env. Mutations:</label>
-      <select id="envLimit">
-        <option value="any">Any</option>
-        <option value="0">None</option>
-        <option value="1">At most 1</option>
-        <option value="2">At most 2</option>
-      </select>
+  <label for="maxMutsSelect">Max Mutations:</label>
+  <select id="maxMutsSelect">
+    <option value="0">0 (no mutations)</option>
+    <option value="1">1 mutation</option>
+    <option value="2">2 mutations</option>
+    <option value="3">3 mutations</option>
+    <option value="4">4 mutations</option>
+    <option value="5">5 mutations</option>
+    <option value="any" selected>Any</option>
+  </select>
 
-      <button id="findCombosBtn" onclick="findCombos()">Find Combinations</button>
-      <div id="reverseResults"></div>
-    </div>
+  <button id="findCombosBtn" onclick="findCombos()">Find Combinations</button>
+  <div id="reverseResults"></div>
+</div>
 
     <!-- ─── Trivia Quiz Panel ─── -->
     <div class="trivia-panel" id="triviaPanel">
