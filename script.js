@@ -776,7 +776,7 @@ window.findCombos = function() {
   for (const [cat, crops] of Object.entries(categories)) {
     for (const crop of crops) {
       if (cropFilter !== "any" && crop !== cropFilter) continue;
-      const base = baseValues[crop] || basePrices[crop] || 0;
+      const base = basePrices[crop] || 0;
       if (!base) continue;
 
       for (const variant of variants) {
