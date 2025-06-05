@@ -30,13 +30,6 @@
 
         <label for="categoryFilter">Filter by Category:</label>
         <select id="categoryFilter"></select>
-
-        <label for="excludeInput">Exclude Crops:</label>
-        <input
-          type="text"
-          id="excludeInput"
-          placeholder="e.g. Carrot, Apple"
-        />
       </div>
 
       <!-- ── Favorites ── -->
@@ -46,23 +39,6 @@
         <p class="empty-state" style="color:#aaa; display:none;">
           No favorites yet
         </p>
-      </div>
-
-      <!-- ── Saved Combinations ── -->
-      <div class="combos-section">
-        <h3>🔖 Saved Combos</h3>
-        <div id="combosList"></div>
-        <p id="noCombosText" style="color:#aaa; display:none;">
-          No combos saved
-        </p>
-        <input
-          type="text"
-          id="comboNameInput"
-          placeholder="Combo name..."
-        />
-        <label><input type="checkbox" id="includeCropCheck" checked /> Include
-          crop</label>
-        <button onclick="saveCombo()">Save Combo</button>
       </div>
     </nav>
 
@@ -240,6 +216,6 @@
   <button class="reverse-lookup-btn" onclick="showReverseLookup()">🔍 Reverse Lookup</button>
   <button class="trivia-btn" onclick="showTrivia()">🎲 Trivia Quiz</button>
 
-  <script src="script.js"></script>
+   <script src="script.js"></script>
 </body>
 </html>
