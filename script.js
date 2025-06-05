@@ -725,70 +725,145 @@ Object.keys(cropInfo).forEach(crop => {
 });
 
 window.findCombos = function() {
-  const target = parseFloat(document.getElementById('targetPrice').value);
-  if (!target || target <= 0) {
-    return alert('Enter a positive target price.');
+  // 1) Grab user inputs
+  const targetValue = parseFloat(document.getElementById('targetPrice').value);
+  if (isNaN(targetValue) || targetValue <= 0) {
+    return alert('Please enter a positive target price.');
   }
 
-  const cropFilter = document.getElementById('reverseCropSelect').value;
+  const cropSelectVal = document.getElementById('reverseCropSelect').value;
+  if (!cropSelectVal) {
+    return alert('You must select a crop.');
+  }
+
   const variantFilter = document.getElementById('reverseVariantSelect').value;
-  const envLimit = document.getElementById('envLimit').value;
-  const results = [];
+  const maxMutsVal    = document.getElementById('maxMutsSelect').value;
 
-  let envSums = [0];
-  if (envLimit !== "0") {
-    envSums.push(1, 9, 24, 99); // single‐mutation values
+  // 2) Decide max allowed mutations
+  let maxAllowed;
+  if (maxMutsVal === 'any') {
+    maxAllowed = Infinity;
+  } else {
+    maxAllowed = parseInt(maxMutsVal, 10);
   }
-  if (envLimit === "2" || envLimit === "any") {
-    envSums.push(108); // Shocked+Frozen = 99 + 9
-  }
-  const envLabels = {
-    0: "No mutation",
-    1: "1× (Wet/Chilled/Chocolate/Moonlit)",
-    9: "Frozen",
-    24: "Zombified",
-    99: "Shocked",
-    108: "Shocked + Frozen"
-  };
 
+  // 3) Configuration: prefer weights around 1 kg, cap each crop’s appearances
+  const IDEAL_WEIGHT = 1.00;
+  const MAX_PER_CROP = 5;
+  const validResults = [];
+
+  // 4) Build array of all mutation objects { name, value }
+  const allMuts = mutations.map(m => ({ name: m.name, value: m.value }));
+
+  // 5) Precompute the power set (all subsets) of allMuts
+  function getAllSubsets(arr) {
+    const subsets = [[]];
+    for (let i = 0; i < arr.length; i++) {
+      const len = subsets.length;
+      for (let j = 0; j < len; j++) {
+        subsets.push(subsets[j].concat(arr[i]));
+      }
+    }
+    return subsets;
+  }
+  const allSubsets = getAllSubsets(allMuts);
+
+  // 6) Define variants array
   const variants = [
-    { name: "Normal", mult: 1 },
-    { name: "Golden", mult: 20 },
+    { name: "Normal",  mult: 1  },
+    { name: "Golden",  mult: 20 },
     { name: "Rainbow", mult: 50 }
   ];
 
-  for (const [cat, crops] of Object.entries(categories)) {
-    for (const crop of crops) {
-      if (cropFilter !== "any" && crop !== cropFilter) continue;
-      const base = basePrices[crop] || 0;
-      if (!base) continue;
-
-      for (const variant of variants) {
-        if (variantFilter !== "any" && variant.name !== variantFilter) continue;
-
-        for (const envSum of envSums) {
-          const totalMult = variant.mult * (1 + envSum);
-          const weight = Math.sqrt(target / (base * totalMult));
-          if (weight >= 0.01 && weight <= 9999) {
-            const variantDesc = variant.name;
-            const mutDesc = envSum === 0 ? "" : `, ${envLabels[envSum]}`;
-            results.push({
-              desc: `${crop} (${variantDesc}${mutDesc})`,
-              weight
-            });
-          }
-        }
+  // 7) Forbid more than one of {Frozen, Chilled, Wet}
+  function tooManyFWC(subset) {
+    let count = 0;
+    for (const m of subset) {
+      if (m.name === 'Frozen' || m.name === 'Chilled' || m.name === 'Wet') {
+        count++;
+        if (count > 1) return true;
       }
+    }
+    return false;
+  }
+
+  // 8) We only need to loop over the single selected crop
+  const crop = cropSelectVal;
+  const base = basePrices[crop] || 0;
+  if (base <= 0) {
+    return alert('Selected crop has no base price.');
+  }
+
+  for (const variant of variants) {
+    if (variantFilter !== 'any' && variant.name !== variantFilter) continue;
+
+    for (const subset of allSubsets) {
+      // 8a) Enforce “maxAllowed mutations”
+      if (subset.length > maxAllowed) continue;
+
+      // 8b) Enforce “at most one of FWC”
+      if (tooManyFWC(subset)) continue;
+
+      // 8c) Compute envSum & total multiplier
+      const envSum    = subset.reduce((sum, m) => sum + m.value, 0);
+      const totalMult = variant.mult * (1 + envSum);
+
+      // 8d) Compute real‐valued weight needed
+      //     targetValue = base × totalMult × weightReal²
+      const weightReal = Math.sqrt(targetValue / (base * totalMult));
+      if (isNaN(weightReal) || weightReal < 0.01 || weightReal > 9999) continue;
+
+      // 8e) Round to two decimals
+      const weightRound = Math.round(weightReal * 100) / 100;
+
+      // 8f) Recompute ±0.005 kg bounds from weightRound
+      const minMass  = Math.max(0, weightRound - 0.005);
+      const maxMass  = weightRound + 0.005;
+      const minTotal = Math.pow(minMass, 2) * base * totalMult;
+      const maxTotal = Math.pow(maxMass, 2) * base * totalMult;
+
+      // 8g) Check if targetValue is attainable when rounding
+      if (targetValue + 1e-9 < minTotal || targetValue - 1e-9 > maxTotal) {
+        continue;
+      }
+
+      // 8h) Build description string
+      const variantDesc = variant.name;
+      const mutDesc     = subset.length === 0
+        ? "No mutations"
+        : subset.map(m => m.name).join(" + ");
+      const desc = `${crop} (${variantDesc}${mutDesc==="No mutations" ? "" : ", " + mutDesc})`;
+
+      // 8i) Compute how close to 1 kg
+      const weightDiff = Math.abs(weightRound - IDEAL_WEIGHT);
+
+      validResults.push({ crop, desc, weightRound, weightDiff });
     }
   }
 
-  results.sort((a, b) => a.weight - b.weight);
-  const listItems = results.slice(0, 10).map(
-    res => `<li>${res.desc} – ${res.weight.toFixed(2)} kg</li>`
-  ).join('');
-  const outputDiv = document.getElementById('reverseResults');
-  outputDiv.innerHTML = `<ul>${listItems || "<li>No combination found</li>"}</ul>`;
+  // 9) Sort by ascending distance from IDEAL_WEIGHT
+  validResults.sort((a, b) => a.weightDiff - b.weightDiff);
+
+  // 10) Pick up to 10 results, never more than MAX_PER_CROP for this single crop
+  const finalList = [];
+  let countThisCrop = 0; // only one crop, so we track a single counter
+
+  for (const item of validResults) {
+    if (finalList.length >= 10) break;
+    if (countThisCrop < MAX_PER_CROP) {
+      finalList.push(item);
+      countThisCrop++;
+    }
+  }
+
+  // 11) Render the results
+  const listHTML = finalList.length
+    ? finalList.map(item => `<li>${item.desc} – ${item.weightRound.toFixed(2)} kg</li>`).join('')
+    : "<li>No combination found</li>";
+
+  document.getElementById('reverseResults').innerHTML = `<ul>${listHTML}</ul>`;
 };
+
 const quizQuestions = [
   {
     q: "Which mutation triples base value?",
