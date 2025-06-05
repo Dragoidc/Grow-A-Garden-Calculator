@@ -244,46 +244,7 @@ cropInfo["Celestiberry"]     = "Buyable from Twilight Shop for 15,000,000₵";
       Object.entries(categories).forEach(([name, crops]) => {
         sidebar.appendChild(createCategorySection(name, crops));
       });
-// ─── Populate “Filter by Mutation” & “Filter by Category” ────────────────
-const mutationFilter = document.getElementById('mutationFilter');
-const categoryFilter = document.getElementById('categoryFilter');
-
-// 1) Build the “All + each mutation” dropdown
-mutationFilter.innerHTML =
-  '<option value="All">All</option>' +
-  mutations.map(m => `<option value="${m.name}">${m.name}</option>`).join('');
-
-// 2) Build the “All + each category” dropdown
-categoryFilter.innerHTML =
-  '<option value="All">All</option>' +
-  Object.keys(categories).map(cat => `<option value="${cat}">${cat}</option>`).join('');
-
-// 3) Whenever either select changes, run applyFilters()
-mutationFilter.addEventListener('change', applyFilters);
-categoryFilter.addEventListener('change', applyFilters);
-
-function applyFilters() {
-  const selectedCategory = categoryFilter.value;
-
-  document.querySelectorAll('.category-section').forEach(section => {
-    const catName = section.querySelector('summary').textContent.trim();
-
-    // Hide entire section if its name doesn’t match the chosen category
-    if (selectedCategory !== 'All' && catName !== selectedCategory) {
-      section.style.display = 'none';
-    } else {
-      section.style.display = 'block';
-      // If a specific category is chosen, open its <details>; if “All,” keep closed
-      section.open = (selectedCategory === 'All') ? false : true;
-    }
-  });
-}
-
-// 4) Run once on load so everything is visible (closed) initially
-applyFilters();
-// ──────────────────────────────────────────────────────────────────────────────
-
-
+          
       function updateFavoritesDisplay() {
         const favoritesList = document.getElementById('favoritesList');
         favoritesList.innerHTML = favorites.map(crop => `
@@ -420,6 +381,44 @@ function updateCategoryStars() {
         { name: "Void Touched", value: 134 },
         { name: "Plasma", value: 4 }        
       ];
+// ─── Populate “Filter by Mutation” & “Filter by Category” ────────────────
+const mutationFilter = document.getElementById('mutationFilter');
+const categoryFilter = document.getElementById('categoryFilter');
+
+// 1) Build the “All + each mutation” dropdown
+mutationFilter.innerHTML =
+  '<option value="All">All</option>' +
+  mutations.map(m => `<option value="${m.name}">${m.name}</option>`).join('');
+
+// 2) Build the “All + each category” dropdown
+categoryFilter.innerHTML =
+  '<option value="All">All</option>' +
+  Object.keys(categories).map(cat => `<option value="${cat}">${cat}</option>`).join('');
+
+// 3) Whenever either select changes, run applyFilters()
+mutationFilter.addEventListener('change', applyFilters);
+categoryFilter.addEventListener('change', applyFilters);
+
+function applyFilters() {
+  const selectedCategory = categoryFilter.value;
+
+  document.querySelectorAll('.category-section').forEach(section => {
+    const catName = section.querySelector('summary').textContent.trim();
+
+    // Hide entire section if its name doesn’t match the chosen category
+    if (selectedCategory !== 'All' && catName !== selectedCategory) {
+      section.style.display = 'none';
+    } else {
+      section.style.display = 'block';
+      // If a specific category is chosen, open its <details>; if “All,” keep closed
+      section.open = (selectedCategory === 'All') ? false : true;
+    }
+  });
+}
+
+// 4) Run once on load so everything is visible (closed) initially
+applyFilters();
+// ──────────────────────────────────────────────────────────────────────────────
 
       let variantMultiplier = 1;
       let baseMultiplier = 1;
