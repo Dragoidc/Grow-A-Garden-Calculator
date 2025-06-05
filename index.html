@@ -7,26 +7,83 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Mobile menu toggle (swipe‐gesture controlled as well) -->
   <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
+
   <div class="container">
+    <!-- ─── Sidebar ─── -->
     <nav class="sidebar" id="sidebar">
+      <!-- Search box -->
       <div class="search-container">
-        <input type="text" class="search-input" placeholder="🔍 Search crops..." id="sidebarSearch">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="🔍 Search crops..."
+          id="sidebarSearch"
+        />
       </div>
 
+      <!-- ── Filter controls ── -->
+      <div class="filter-controls">
+        <label for="mutationFilter">Filter by Mutation:</label>
+        <select id="mutationFilter"></select>
+
+        <label for="categoryFilter">Filter by Category:</label>
+        <select id="categoryFilter"></select>
+
+        <label for="excludeInput">Exclude Crops:</label>
+        <input
+          type="text"
+          id="excludeInput"
+          placeholder="e.g. Carrot, Apple"
+        />
+      </div>
+
+      <!-- ── Favorites ── -->
       <div class="favorites-section">
         <h3>★ Favorites</h3>
         <div id="favoritesList"></div>
-        <p class="empty-state" style="color:#aaa; display:none;">No favorites yet</p>
+        <p class="empty-state" style="color:#aaa; display:none;">
+          No favorites yet
+        </p>
+      </div>
+
+      <!-- ── Saved Combinations ── -->
+      <div class="combos-section">
+        <h3>🔖 Saved Combos</h3>
+        <div id="combosList"></div>
+        <p id="noCombosText" style="color:#aaa; display:none;">
+          No combos saved
+        </p>
+        <input
+          type="text"
+          id="comboNameInput"
+          placeholder="Combo name..."
+        />
+        <label><input type="checkbox" id="includeCropCheck" checked /> Include
+          crop</label>
+        <button onclick="saveCombo()">Save Combo</button>
       </div>
     </nav>
 
+    <!-- ─── Crop / Calculator Panel ─── -->
     <div id="panel" class="plant-panel">
       <button class="back-btn" onclick="hidePanel()">← Back</button>
       <h3 id="panel-title"></h3>
       <select id="plant-select"></select>
-      <label>Mass (kg) <span class="tooltip" data-tooltip="0.01 - 9999 kg">❓</span></label>
-      <input type="number" id="mass" step="0.01" min="0.01" max="9999" placeholder="e.g. 24.02" oninput="validateMass()">
+
+      <label>
+        Mass (kg) <span class="tooltip" data-tooltip="0.01 - 9999 kg">❓</span>
+      </label>
+      <input
+        type="number"
+        id="mass"
+        step="0.01"
+        min="0.01"
+        max="9999"
+        placeholder="e.g. 24.02"
+        oninput="validateMass()"
+      />
       <p class="input-hint">Allowed range: 0.01 - 9999 kg</p>
       <p class="validation-error" id="massError"></p>
 
@@ -46,14 +103,19 @@
         </div>
       </div>
 
-      <input type="hidden" id="multiplier" value="1">
+      <input type="hidden" id="multiplier" value="1" />
       <button onclick="calculate()">Calculate</button>
       <div class="result" id="result" style="display:none;"></div>
     </div>
 
+    <!-- ─── Crop Reference Panel (Value at 1 Kg) ─── -->
     <div class="crop-reference-panel" id="crop-reference">
-      <button class="back-btn" onclick="hideCropReference()">← Back to Calculator</button>
-      <h2 style="text-align:center; font-weight:bold; font-size:1.6em; margin-bottom:20px;">Crop Value Reference (Value at 1 Kg)</h2>
+      <button class="back-btn" onclick="hideCropReference()">
+        ← Back to Calculator
+      </button>
+      <h2 style="text-align:center; font-weight:bold; font-size:1.6em; margin-bottom:20px;">
+        Crop Value Reference (Value at 1 Kg)
+      </h2>
       <div class="table-container">
         <table>
           <thead>
@@ -64,10 +126,64 @@
       </div>
     </div>
 
+    <!-- ─── Reverse Lookup Panel ─── -->
+    <div class="reverse-lookup-panel" id="reversePanel">
+      <button class="back-btn" onclick="hideReverseLookup()">← Back</button>
+      <h2>Reverse Price Lookup</h2>
+
+      <label for="targetPrice">Target Price:</label>
+      <input
+        type="number"
+        id="targetPrice"
+        placeholder="Enter target price"
+        min="1"
+      />
+
+      <label for="reverseCropSelect">Crop:</label>
+      <select id="reverseCropSelect"></select>
+
+      <label for="reverseVariantSelect">Variant:</label>
+      <select id="reverseVariantSelect">
+        <option value="any">Any</option>
+        <option value="Normal">Normal</option>
+        <option value="Golden">Golden</option>
+        <option value="Rainbow">Rainbow</option>
+      </select>
+
+      <label for="envLimit">Env. Mutations:</label>
+      <select id="envLimit">
+        <option value="any">Any</option>
+        <option value="0">None</option>
+        <option value="1">At most 1</option>
+        <option value="2">At most 2</option>
+      </select>
+
+      <button id="findCombosBtn" onclick="findCombos()">Find Combinations</button>
+      <div id="reverseResults"></div>
+    </div>
+
+    <!-- ─── Trivia Quiz Panel ─── -->
+    <div class="trivia-panel" id="triviaPanel">
+      <button class="back-btn" onclick="hideTrivia()">← Back</button>
+      <h2>Trivia Quiz</h2>
+      <div id="quizContent">
+        <p id="quizQuestion"></p>
+        <div id="quizOptions"></div>
+        <p id="quizFeedback"></p>
+        <button id="nextQuestionBtn" onclick="nextQuestion()" style="display:none;">
+          Next
+        </button>
+      </div>
+    </div>
+
+    <!-- ─── Main Content ─── -->
     <main class="main">
       <section class="hero">
         <h1>Welcome to the Sell Price Calculator!</h1>
-        <p>Select a category on the left, pick your plant, enter its weight and multiplier, then click Calculate to see your sell price.</p>
+        <p>
+          Select a category on the left, pick your plant, enter its weight and
+          multiplier, then click Calculate to see your sell price.
+        </p>
       </section>
 
       <section class="calculator-panel">
@@ -76,12 +192,24 @@
       </section>
 
       <section class="tips-grid">
-        <h2>Quick Tips & FAQs</h2>
+        <h2>Quick Tips &amp; FAQs</h2>
         <div class="grid-cards">
-          <div class="card"><h3>Tip: Precision Matters</h3><p>Use two decimal places in weight for the most accurate price.</p></div>
-          <div class="card"><h3>Tip: Multipliers</h3><p>Enter your mutation or event multipliers accurately to reflect true value.</p></div>
-          <div class="card"><h3>FAQ: Floor Function</h3><p>This calculator rounds down (floor) to match in-game behavior.</p></div>
-          <div class="card"><h3>FAQ: Resetting</h3><p>Click a different category or reload the page to reset inputs.</p></div>
+          <div class="card">
+            <h3>Tip: Precision Matters</h3>
+            <p>Use two decimal places in weight for the most accurate price.</p>
+          </div>
+          <div class="card">
+            <h3>Tip: Multipliers</h3>
+            <p>Enter your mutation or event multipliers accurately to reflect true value.</p>
+          </div>
+          <div class="card">
+            <h3>FAQ: Floor Function</h3>
+            <p>This calculator rounds down (floor) to match in-game behavior.</p>
+          </div>
+          <div class="card">
+            <h3>FAQ: Resetting</h3>
+            <p>Click a different category or reload the page to reset inputs.</p>
+          </div>
         </div>
       </section>
 
@@ -98,11 +226,20 @@
     </main>
   </div>
 
+  <!-- ─── Footer ─── -->
   <footer>
-    <p><a href="#">Grow a Garden Wiki</a> | <a href="#">Discord</a> | <a href="#">GitHub Source</a></p>
+    <p>
+      <a href="#">Grow a Garden Wiki</a> |
+      <a href="#">Discord</a> |
+      <a href="#">GitHub Source</a>
+    </p>
   </footer>
-<button class="view-crops-btn" onclick="showCropReference()">🌱 Crop Values</button>
-  
+
+  <!-- ─── Floating Buttons ─── -->
+  <button class="view-crops-btn" onclick="showCropReference()">🌱 Crop Values</button>
+  <button class="reverse-lookup-btn" onclick="showReverseLookup()">🔍 Reverse Lookup</button>
+  <button class="trivia-btn" onclick="showTrivia()">🎲 Trivia Quiz</button>
+
   <script src="script.js"></script>
 </body>
 </html>
