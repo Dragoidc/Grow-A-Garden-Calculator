@@ -1,4 +1,4 @@
- document.addEventListener('DOMContentLoaded', () => {
+     document.addEventListener('DOMContentLoaded', () => {
 const categories = {
   "Public Crops": [
     "Carrot","Strawberry","Blueberry","Orange Tulip","Tomato",
@@ -88,66 +88,7 @@ const categories = {
           "Celestiberry": "https://static.wikia.nocookie.net/growagarden/images/3/33/CelestiberryIcon.png/revision/latest/scale-to-width-down/1000?cb=20250525112629",
           "Moon Mango": "https://static.wikia.nocookie.net/growagarden/images/f/fd/MoonMangoIcon.png/revision/latest/scale-to-width-down/1000?cb=20250525113246"
         };
-const plantIcons = {
-  // Public Crops
-  "Carrot": "fa-carrot",
-  "Strawberry": "fa-strawberry",
-  "Blueberry": "fa-apple-whole", // No blueberry-specific icon
-  "Orange Tulip": "fa-sun",
-  "Tomato": "fa-seedling",
-  "Corn": "fa-wheat-awn",
-  "Daffodil": "fa-leaf",
-  "Watermelon": "fa-watermelon",
-  "Pumpkin": "fa-pumpkin",
-  "Apple": "fa-apple-whole",
-  "Bamboo": "fa-tree",
-  "Coconut": "fa-coconut",
-  "Cactus": "fa-cactus",
-  "Dragon Fruit": "fa-dragon",
-  "Mango": "fa-mango",
-  "Grape": "fa-wine-bottle",
-  "Mushroom": "fa-mushroom",
-  "Pepper": "fa-pepper-hot",
-  "Cacao": "fa-cookie",
-  "Beanstalk": "fa-seedling",
 
-  // Seed Pack
-  "Lemon": "fa-lemon",
-  "Pineapple": "fa-pineapple",
-  "Peach": "fa-peach",
-  "Raspberry": "fa-apple-whole",
-  "Pear": "fa-pear",
-  "Cranberry": "fa-apple-whole",
-  "Durian": "fa-cloud-meatball",
-  "Eggplant": "fa-eggplant",
-  "Venus Flytrap": "fa-bug",
-  "Lotus": "fa-spa",
-
-  // Exotic Seed Pack
-  "Papaya": "fa-pagelines",
-  "Banana": "fa-banana",
-  "Passionfruit": "fa-apple-whole",
-  "Soul Fruit": "fa-ghost",
-  "Cursed Fruit": "fa-skull",
-
-  // Easter Event
-  "Chocolate Carrot": "fa-carrot",
-  "Candy Sunflower": "fa-sun",
-  "Easter Egg": "fa-egg",
-  "Red Lollipop": "fa-candy-cane",
-  "Candy Blossom": "fa-candy-cane",
-
-  // Lunar Glow Event
-  "Nightshade": "fa-moon",
-  "Glowshroom": "fa-mushroom",
-  "Mint": "fa-leaf",
-  "Moonflower": "fa-moon",
-  "Starfruit": "fa-star",
-  "Moonglow": "fa-moon",
-  "Moon Blossom": "fa-spa",
-  "Blood Banana": "fa-banana",
-  "Moon Melon": "fa-watermelon"
-};
 
       const basePrices = {
         "Carrot": 270,
@@ -303,6 +244,45 @@ cropInfo["Celestiberry"]     = "Buyable from Twilight Shop for 15,000,000₵";
       Object.entries(categories).forEach(([name, crops]) => {
         sidebar.appendChild(createCategorySection(name, crops));
       });
+// ─── Populate “Filter by Mutation” & “Filter by Category” ────────────────
+const mutationFilter = document.getElementById('mutationFilter');
+const categoryFilter = document.getElementById('categoryFilter');
+
+// 1) Build the “All + each mutation” dropdown
+mutationFilter.innerHTML =
+  '<option value="All">All</option>' +
+  mutations.map(m => `<option value="${m.name}">${m.name}</option>`).join('');
+
+// 2) Build the “All + each category” dropdown
+categoryFilter.innerHTML =
+  '<option value="All">All</option>' +
+  Object.keys(categories).map(cat => `<option value="${cat}">${cat}</option>`).join('');
+
+// 3) Whenever either select changes, run applyFilters()
+mutationFilter.addEventListener('change', applyFilters);
+categoryFilter.addEventListener('change', applyFilters);
+
+function applyFilters() {
+  const selectedCategory = categoryFilter.value;
+
+  document.querySelectorAll('.category-section').forEach(section => {
+    const catName = section.querySelector('summary').textContent.trim();
+
+    // Hide entire section if its name doesn’t match the chosen category
+    if (selectedCategory !== 'All' && catName !== selectedCategory) {
+      section.style.display = 'none';
+    } else {
+      section.style.display = 'block';
+      // If a specific category is chosen, open its <details>; if “All,” keep closed
+      section.open = (selectedCategory === 'All') ? false : true;
+    }
+  });
+}
+
+// 4) Run once on load so everything is visible (closed) initially
+applyFilters();
+// ──────────────────────────────────────────────────────────────────────────────
+
 
       function updateFavoritesDisplay() {
         const favoritesList = document.getElementById('favoritesList');
@@ -326,7 +306,20 @@ cropInfo["Celestiberry"]     = "Buyable from Twilight Shop for 15,000,000₵";
     updateFavoritesDisplay();
     updateCategoryStars();    // ← SYNC ALL STARS IMMEDIATELY
   }
-
+function updateCategoryStars() {
+  document.querySelectorAll('.star-icon').forEach(icon => {
+    const button = icon.closest('button[data-crop]');
+    if (!button) return;
+    const cropName = button.getAttribute('data-crop');
+    if (favorites.includes(cropName)) {
+      icon.classList.add('active');
+      icon.textContent = '★';
+    } else {
+      icon.classList.remove('active');
+      icon.textContent = '☆';
+    }
+  });
+}
 
       document.getElementById('sidebarSearch').addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase();
@@ -729,7 +722,202 @@ document.getElementById('result').style.display = 'block';
         
         updateHistoryDisplay();
       };
+window.showReverseLookup = function() {
+  hidePanel();
+  hideCropReference();
+  document.getElementById('reversePanel').classList.add('active');
 
+  const cropSelect = document.getElementById('reverseCropSelect');
+  if (cropSelect && cropSelect.options.length === 0) {
+    let optionsHTML = '<option value="any">Any</option>';
+    for (const [cat, crops] of Object.entries(categories)) {
+      optionsHTML += `<optgroup label="${cat}">` +
+        crops.map(c => `<option value="${c}">${c}</option>`).join('') +
+        '</optgroup>';
+    }
+    cropSelect.innerHTML = optionsHTML;
+  }
+};
+
+window.hideReverseLookup = function() {
+  document.getElementById('reversePanel').classList.remove('active');
+};
+
+// Build an object of baseValues from your cropInfo (if available)
+const baseValues = {};
+Object.keys(cropInfo).forEach(crop => {
+  const match = (cropInfo[crop] || "").match(/for\s([\d,]+)₵/);
+  if (match) {
+    baseValues[crop] = parseInt(match[1].replace(/,/g, ''), 10);
+  }
+});
+
+window.findCombos = function() {
+  const target = parseFloat(document.getElementById('targetPrice').value);
+  if (!target || target <= 0) {
+    return alert('Enter a positive target price.');
+  }
+
+  const cropFilter = document.getElementById('reverseCropSelect').value;
+  const variantFilter = document.getElementById('reverseVariantSelect').value;
+  const envLimit = document.getElementById('envLimit').value;
+  const results = [];
+
+  let envSums = [0];
+  if (envLimit !== "0") {
+    envSums.push(1, 9, 24, 99); // single‐mutation values
+  }
+  if (envLimit === "2" || envLimit === "any") {
+    envSums.push(108); // Shocked+Frozen = 99 + 9
+  }
+  const envLabels = {
+    0: "No mutation",
+    1: "1× (Wet/Chilled/Chocolate/Moonlit)",
+    9: "Frozen",
+    24: "Zombified",
+    99: "Shocked",
+    108: "Shocked + Frozen"
+  };
+
+  const variants = [
+    { name: "Normal", mult: 1 },
+    { name: "Golden", mult: 20 },
+    { name: "Rainbow", mult: 50 }
+  ];
+
+  for (const [cat, crops] of Object.entries(categories)) {
+    for (const crop of crops) {
+      if (cropFilter !== "any" && crop !== cropFilter) continue;
+      const base = baseValues[crop] || basePrices[crop] || 0;
+      if (!base) continue;
+
+      for (const variant of variants) {
+        if (variantFilter !== "any" && variant.name !== variantFilter) continue;
+
+        for (const envSum of envSums) {
+          const totalMult = variant.mult * (1 + envSum);
+          const weight = Math.sqrt(target / (base * totalMult));
+          if (weight >= 0.01 && weight <= 9999) {
+            const variantDesc = variant.name;
+            const mutDesc = envSum === 0 ? "" : `, ${envLabels[envSum]}`;
+            results.push({
+              desc: `${crop} (${variantDesc}${mutDesc})`,
+              weight
+            });
+          }
+        }
+      }
+    }
+  }
+
+  results.sort((a, b) => a.weight - b.weight);
+  const listItems = results.slice(0, 10).map(
+    res => `<li>${res.desc} – ${res.weight.toFixed(2)} kg</li>`
+  ).join('');
+  const outputDiv = document.getElementById('reverseResults');
+  outputDiv.innerHTML = `<ul>${listItems || "<li>No combination found</li>"}</ul>`;
+};
+const quizQuestions = [
+  {
+    q: "Which mutation triples base value?",
+    options: ["Pollinated", "Frozen", "Golden"],
+    answer: 0
+  },
+  {
+    q: "Golden variant multiplies a crop's value by:",
+    options: ["20×", "50×", "100×"],
+    answer: 0
+  },
+  {
+    q: "What is the rarity (spawn chance) of a Rainbow crop?",
+    options: ["1%", "0.1%", "5%"],
+    answer: 1
+  },
+  {
+    q: "Which mutation is obtained during a Thunderstorm event?",
+    options: ["Frozen", "Shocked", "Zombified"],
+    answer: 1
+  },
+  {
+    q: "How much bonus does the Shocked mutation give?",
+    options: ["+50", "+99", "+134"],
+    answer: 1
+  }
+];
+
+let quizIndex = 0;
+let quizQuestionsSelected = [];
+let score = 0;
+
+window.showTrivia = function() {
+  hidePanel();
+  hideCropReference();
+  document.getElementById('triviaPanel').classList.add('active');
+
+  // Pick 3 random questions
+  quizQuestionsSelected = quizQuestions
+    .slice()
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);
+  quizIndex = 0;
+  score = 0;
+  showQuizQuestion();
+};
+
+window.hideTrivia = function() {
+  document.getElementById('triviaPanel').classList.remove('active');
+};
+
+function showQuizQuestion() {
+  const currentQ = quizQuestionsSelected[quizIndex];
+  document.getElementById('quizQuestion').textContent = currentQ.q;
+  document.getElementById('quizFeedback').textContent = "";
+  document.getElementById('nextQuestionBtn').style.display = 'none';
+
+  const optionsDiv = document.getElementById('quizOptions');
+  optionsDiv.innerHTML = "";
+  currentQ.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = opt;
+    btn.className = 'quiz-option-btn';
+    btn.onclick = () => submitAnswer(i);
+    optionsDiv.appendChild(btn);
+  });
+}
+
+window.submitAnswer = function(optionIndex) {
+  const currentQ = quizQuestionsSelected[quizIndex];
+  const feedback = document.getElementById('quizFeedback');
+  if (optionIndex === currentQ.answer) {
+    score++;
+    feedback.textContent = "Correct!";
+  } else {
+    const correctOpt = currentQ.options[currentQ.answer];
+    feedback.textContent = `Incorrect. The correct answer is: ${correctOpt}.`;
+  }
+  document.querySelectorAll('.quiz-option-btn').forEach(btn => btn.disabled = true);
+
+  const nextBtn = document.getElementById('nextQuestionBtn');
+  if (quizIndex < quizQuestionsSelected.length - 1) {
+    nextBtn.textContent = "Next";
+    nextBtn.style.display = 'inline-block';
+  } else {
+    nextBtn.textContent = "See Score";
+    nextBtn.style.display = 'inline-block';
+  }
+};
+
+window.nextQuestion = function() {
+  const nextBtn = document.getElementById('nextQuestionBtn');
+  if (quizIndex < quizQuestionsSelected.length - 1) {
+    quizIndex++;
+    showQuizQuestion();
+  } else {
+    const quizContent = document.getElementById('quizContent');
+    quizContent.innerHTML = `<p>You scored ${score} out of ${quizQuestionsSelected.length}!</p>`;
+  }
+  nextBtn.style.display = 'none';
+};
      window.validateMass = function() {
   const massInput = document.getElementById('mass');
   const errorDisplay = document.getElementById('massError');
@@ -788,8 +976,8 @@ function updateCategoryStars() {
       updateHistoryDisplay();
       sidebar.classList.toggle('collapsed', sidebarCollapsed);
       updateFavoritesDisplay();
-    });
-function toggleSidebar() {
+      
+      function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   sidebar.classList.toggle('active');
   
@@ -799,3 +987,69 @@ function toggleSidebar() {
     plantPanel.classList.remove('active');
   }
 }
+  // ─── Pinch‐to‐Zoom & Swipe to Toggle Sidebar ─────────────────────────────
+  let touchStartX = null;
+  let touchStartY = null;
+  document.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    } else {
+      touchStartX = null;
+      touchStartY = null;
+    }
+  });
+
+  document.addEventListener('touchend', e => {
+    if (touchStartX !== null && e.changedTouches.length === 1) {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0) {
+          document.getElementById('sidebar').classList.remove('collapsed');
+        } else {
+          document.getElementById('sidebar').classList.add('collapsed');
+        }
+      }
+    }
+  });
+
+  // Pinch to zoom in #result
+  const resultDiv = document.getElementById('result');
+  let pinchStartDist = 0;
+  let baseScale = 1;
+  let currentScale = 1;
+
+  resultDiv.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const [t1, t2] = e.touches;
+      const dx = t1.clientX - t2.clientX;
+      const dy = t1.clientY - t2.clientY;
+      pinchStartDist = Math.hypot(dx, dy);
+      baseScale = currentScale;
+    }
+  });
+
+  resultDiv.addEventListener('touchmove', e => {
+    if (e.touches.length === 2 && pinchStartDist) {
+      e.preventDefault();
+      const [t1, t2] = e.touches;
+      const dx = t1.clientX - t2.clientX;
+      const dy = t1.clientY - t2.clientY;
+      const dist = Math.hypot(dx, dy);
+      let newScale = baseScale * (dist / pinchStartDist);
+      if (newScale < 1) newScale = 1;
+      if (newScale > 3) newScale = 3;
+      resultDiv.style.transform = `scale(${newScale})`;
+      currentScale = newScale;
+    }
+  });
+
+  resultDiv.addEventListener('touchend', e => {
+    if (e.touches.length < 2) {
+      pinchStartDist = 0;
+    }
+  });
+    });
+
