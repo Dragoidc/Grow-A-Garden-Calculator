@@ -227,6 +227,34 @@ cropInfo["Celestiberry"]     = "Buyable from Twilight Shop for 15,000,000₵";
 
 
       });
+  // 1) “Reverse Lookup” button: opens the panel and populates the Crop dropdown
+  const revBtn = document.getElementById('reverseLookupBtn');
+  if (revBtn) {
+    revBtn.addEventListener('click', () => {
+      // Hide any other panel (calculator, crop reference, etc.)
+      if (typeof hidePanel === 'function')       hidePanel();
+      if (typeof hideCropReference === 'function') hideCropReference();
+
+      // Show the reverse‐lookup panel
+      const reversePanel = document.getElementById('reversePanel');
+      reversePanel.classList.add('active');
+
+      // Populate the “Crop” dropdown if it still only has the placeholder
+      const cropSelect = document.getElementById('reverseCropSelect');
+      if (cropSelect && cropSelect.options.length === 1) {
+        populateCropDropdown();
+      }
+    });
+  }
+
+  // 2) “Back” button inside Reverse Lookup panel: hides the panel
+  const revBackBtn = document.getElementById('reverseBackBtn');
+  if (revBackBtn) {
+    revBackBtn.addEventListener('click', () => {
+      const reversePanel = document.getElementById('reversePanel');
+      reversePanel.classList.remove('active');
+    });
+  }
      // ── END: placeholders ──
      
       let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
